@@ -125,7 +125,7 @@ function anticonferences_admin_format_metabox( $festival = null ) {
 	?>
 	<div id="post-formats-select">
 		<fieldset>
-			<legend class="screen-reader-text"><?php esc_html_e( 'Post Formats' ); ?></legend>
+			<legend class="screen-reader-text"><?php esc_html_e( 'Post Formats', 'anticonferences' ); ?></legend>
 
 			<?php foreach ( $post_formats as $format ) : ?>
 

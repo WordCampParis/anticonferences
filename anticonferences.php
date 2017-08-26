@@ -141,6 +141,7 @@ final class AntiConferences {
 		$this->dir     = plugin_dir_path( $this->file );
 		$this->url     = plugin_dir_url ( $this->file );
 		$this->inc_dir = trailingslashit( $this->dir . 'inc' );
+		$this->tpl_dir = trailingslashit( $this->dir . 'templates' );
 	}
 
 	/**
@@ -152,6 +153,7 @@ final class AntiConferences {
 		//spl_autoload_register( array( $this, 'autoload' ) );
 
 		require $this->inc_dir . 'functions.php';
+		require $this->inc_dir . 'tags.php';
 
 		if ( is_admin() ) {
 			require $this->inc_dir . 'admin.php';
