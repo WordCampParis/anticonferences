@@ -61,7 +61,8 @@ function anticonferences_admin_details_metabox( $festival = null ) {
 
 	$customs      = get_post_custom( $festival->ID );
 	$placeholders = apply_filters( 'anticonferences_meta_placeholders', array(
-		'_festival_closing_date' => 'YYYY-MM-DD HH:II',
+		'_festival_closing_date'  => 'YYYY-MM-DD HH:II',
+		'_festival_slack_webhook' => __( 'URL du webhook Slack', 'anticonferences' ),
 	) );
 
 	$output = '';

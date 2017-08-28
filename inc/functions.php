@@ -28,6 +28,12 @@ function anticonferences_get_default_metas() {
 				'name' => 'votes_amount',
 			),
 		),
+		'_festival_slack_webhook' => array(
+			'sanitize_callback' => 'anticonferences_sanitize_metas',
+			'type'              => 'string',
+			'description'       => __( 'Notifier les nouveaux sujets dans Slack', 'anticonferences' ),
+			'single'            => true,
+		),
 	);
 }
 
@@ -119,6 +125,9 @@ function anticonferences_sanitize_metas( $value = '', $meta_key = '' ) {
 
 	} elseif ( '_festival_votes_amount' === $meta_key ) {
 		$value = absint( $value );
+
+	} elseif ( '_festival_slack_webhook' === $meta_key  ) {
+		$value = esc_url_raw( $value );
 	}
 
 	return $value;
@@ -217,8 +226,8 @@ function anticonferences_comments_open( $return = false, $post_id = 0 ) {
 	if ( 'festivals' === get_post_type( $post ) ) {
 		// Temporary filters
 		if ( is_single() ) {
-			add_filter( 'comments_template',  'anticonferences_subjects_template',  0    );
-			add_filter( 'comment_id_fields',  'anticonferences_subject_type'             );
+			add_filter( 'comments_template',  'anticonferences_subjects_template', 0 );
+			add_filter( 'comment_id_fields',  'anticonferences_subject_type'         );
 		}
 
 		$return = true;
@@ -271,3 +280,26 @@ function anticonferences_parse_comment_query( WP_Comment_Query $comment_query ) 
 	}
 }
 add_action( 'parse_comment_query', 'anticonferences_parse_comment_query' );
+
+function anticonferences_notify_moderator( $maybe_notify = true, $comment_ID = 0 ) {
+	$subject = get_comment( $comment_ID );
+
+	if ( ! isset( $subject->comment_type ) || 'ac_subject' !== $subject->comment_type ) {
+		return $maybe_notify;
+	}
+
+	$slack_webhook = get_post_meta( $subject->comment_post_ID, '_festival_slack_webhook', true );
+
+	if ( ! $slack_webhook ) {
+		return $maybe_notify;
+	}
+
+	$payload = new AC_Slack_Payload( $subject );
+
+	wp_remote_post( $slack_webhook, array(
+		'body' => $payload->get_json(),
+	) );
+
+	return false;
+}
+add_filter( 'notify_moderator', 'anticonferences_notify_moderator', 10, 2 );
