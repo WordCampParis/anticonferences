@@ -17,7 +17,7 @@ if ( ! class_exists( 'Walker_Comment' ) ) {
 	require_once ABSPATH . WPINC . '/class-walker-comment.php';
 }
 
-class AC_Walker_Comment extends Walker_Comment {
+class AC_Walker_Subject extends Walker_Comment {
 	/**
 	 * Outputs a single subject.
 	 *

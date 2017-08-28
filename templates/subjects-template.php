@@ -19,7 +19,7 @@
 					'style'       => 'ol',
 					'short_ping'  => true,
 					'type'        => 'ac_subject',
-					'walker'      => new AC_Walker_Comment,
+					'walker'      => new AC_Walker_Subject,
 				) );
 			?>
 		</ol>
