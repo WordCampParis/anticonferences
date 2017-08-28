@@ -219,7 +219,6 @@ function anticonferences_comments_open( $return = false, $post_id = 0 ) {
 		if ( is_single() ) {
 			add_filter( 'comments_template',  'anticonferences_subjects_template',  0    );
 			add_filter( 'comment_id_fields',  'anticonferences_subject_type'             );
-			add_filter( 'comment_reply_link', 'anticonferences_subject_support',   10, 3 );
 		}
 
 		$return = true;

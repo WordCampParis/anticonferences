@@ -18,7 +18,8 @@
 					'avatar_size' => 100,
 					'style'       => 'ol',
 					'short_ping'  => true,
-					'type'        => 'ac_subject'
+					'type'        => 'ac_subject',
+					'walker'      => new AC_Walker_Comment,
 				) );
 			?>
 		</ol>

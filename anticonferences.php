@@ -150,7 +150,7 @@ final class AntiConferences {
 	 * @since 1.0.0
 	 */
 	private function inc() {
-		//spl_autoload_register( array( $this, 'autoload' ) );
+		spl_autoload_register( array( $this, 'autoload' ) );
 
 		require $this->inc_dir . 'functions.php';
 		require $this->inc_dir . 'tags.php';
@@ -170,7 +170,7 @@ final class AntiConferences {
 	public function autoload( $class ) {
 		$name = str_replace( '_', '-', strtolower( $class ) );
 
-		if ( 0 !== strpos( $name, $this->domain ) ) {
+		if ( 0 !== strpos( $name, 'ac' ) ) {
 			return;
 		}
 
