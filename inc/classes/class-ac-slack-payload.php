@@ -43,9 +43,9 @@ class AC_Slack_Payload {
 
 		$this->attachments[] = (object) array(
 			'fallback' => $title,
-         	'pretext'  => $title,
-         	'color'    => '#006494',
-         	'fields'   => array(),
+			'pretext'  => $title,
+			'color'    => '#006494',
+			'fields'   => array(),
 		);
 
 		$this->attachments[0]->fields[] = (object) array(

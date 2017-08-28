@@ -11,28 +11,28 @@ defined( 'ABSPATH' ) || exit;
 function anticonferences_get_default_metas() {
 	return array(
 		'_festival_closing_date' => array(
-			'sanitize_callback' => 'anticonferences_sanitize_metas',
-			'type'              => 'string',
-			'description'       => __( 'Date de clôture pour le dépôt des sujets', 'anticonferences' ),
-			'single'            => true,
-			'show_in_rest'      => array(
+			'sanitize_callback'  => 'anticonferences_sanitize_metas',
+			'type'               => 'string',
+			'description'        => __( 'Date de clôture pour le dépôt des sujets', 'anticonferences' ),
+			'single'             => true,
+			'show_in_rest'       => array(
 				'name' => 'closing_date',
 			),
 		),
 		'_festival_votes_amount' => array(
-			'sanitize_callback' => 'anticonferences_sanitize_metas',
-			'type'              => 'integer',
-			'description'       => __( 'Nombre de votes dont les utilisateurs disposent', 'anticonferences' ),
-			'single'            => true,
-			'show_in_rest'      => array(
+			'sanitize_callback'  => 'anticonferences_sanitize_metas',
+			'type'               => 'integer',
+			'description'        => __( 'Nombre de votes dont les utilisateurs disposent', 'anticonferences' ),
+			'single'             => true,
+			'show_in_rest'       => array(
 				'name' => 'votes_amount',
 			),
 		),
 		'_festival_slack_webhook' => array(
-			'sanitize_callback' => 'anticonferences_sanitize_metas',
-			'type'              => 'string',
-			'description'       => __( 'Notifier les nouveaux sujets dans Slack', 'anticonferences' ),
-			'single'            => true,
+			'sanitize_callback'   => 'anticonferences_sanitize_metas',
+			'type'                => 'string',
+			'description'         => __( 'Notifier les nouveaux sujets dans Slack', 'anticonferences' ),
+			'single'              => true,
 		),
 	);
 }
