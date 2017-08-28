@@ -66,3 +66,20 @@ function anticonferences_subject_support( $link = '', $args = array(), WP_Commen
 
 	return esc_html__( 'Supporter ce sujet', 'anticonferences' );
 }
+
+function anticonferences_subjects_closed() {
+	$closed   = false;
+	$end_date = (int) get_post_meta( get_the_ID(), '_festival_closing_date', true );
+
+	if ( ! $end_date ) {
+		return $closed;
+	}
+
+	$now = strtotime( date_i18n( 'Y-m-d H:i' ) );
+
+	if ( $end_date <= $now ) {
+		$closed = true;
+	}
+
+	return $closed;
+}
