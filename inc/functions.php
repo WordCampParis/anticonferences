@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 
 function anticonferences_get_default_metas() {
 	return array(
-		'_festival_closing_date' => array(
+		'_camp_closing_date' => array(
 			'sanitize_callback'  => 'anticonferences_sanitize_metas',
 			'type'               => 'string',
 			'description'        => __( 'Date de clôture pour le dépôt des sujets', 'anticonferences' ),
@@ -19,7 +19,7 @@ function anticonferences_get_default_metas() {
 				'name' => 'closing_date',
 			),
 		),
-		'_festival_votes_amount' => array(
+		'_camp_votes_amount' => array(
 			'sanitize_callback'  => 'anticonferences_sanitize_metas',
 			'type'               => 'integer',
 			'description'        => __( 'Nombre de votes dont les utilisateurs disposent', 'anticonferences' ),
@@ -28,7 +28,7 @@ function anticonferences_get_default_metas() {
 				'name' => 'votes_amount',
 			),
 		),
-		'_festival_slack_webhook' => array(
+		'_camp_slack_webhook' => array(
 			'sanitize_callback'   => 'anticonferences_sanitize_metas',
 			'type'                => 'string',
 			'description'         => __( 'Notifier les nouveaux sujets dans Slack', 'anticonferences' ),
@@ -37,7 +37,7 @@ function anticonferences_get_default_metas() {
 	);
 }
 
-function anticonferences_register_post_metas( $post_type = 'festivals' ) {
+function anticonferences_register_post_metas( $post_type = 'camps' ) {
 	$default_metas = anticonferences_get_default_metas();
 
 	foreach ( $default_metas as $key_meta => $meta_args ) {
@@ -52,33 +52,33 @@ function anticonferences_register_post_metas( $post_type = 'festivals' ) {
 function anticonferences_register_objects() {
 	// Post type
 	$labels = array(
-		'name'                  => __( 'Festivals',                               'anticonferences' ),
-		'menu_name'             => _x( 'AntiConférences', 'Main Plugin menu',     'anticonferences' ),
-		'all_items'             => __( 'Tous les festivals',                      'anticonferences' ),
-		'singular_name'         => __( 'Festival',                                'anticonferences' ),
-		'add_new'               => __( 'Ajouter',                                 'anticonferences' ),
-		'add_new_item'          => __( 'Ajouter un nouveau festival',             'anticonferences' ),
-		'edit_item'             => __( 'Modifier le festival',                    'anticonferences' ),
-		'new_item'              => __( 'Nouveau festival',                        'anticonferences' ),
-		'view_item'             => __( 'Voir le festival',                        'anticonferences' ),
-		'search_items'          => __( 'Rechercher un festival',                  'anticonferences' ),
-		'not_found'             => __( 'Aucun festival trouvé',                   'anticonferences' ),
-		'not_found_in_trash'    => __( 'Aucun festival trouvé dans la corbeille', 'anticonferences' ),
-		'insert_into_item'      => __( 'Insérer dans le festival',                'anticonferences' ),
-		'uploaded_to_this_item' => __( 'Attaché à ce festival',                   'anticonferences' ),
-		'filter_items_list'     => __( 'Filtrer la liste des festivals',          'anticonferences' ),
-		'items_list_navigation' => __( 'Navigation de la liste des festivals',    'anticonferences' ),
-		'items_list'            => __( 'Liste des festivals',                     'anticonferences' ),
-		'name_admin_bar'        => _x( 'Festival', 'Name Admin Bar',              'anticonferences' ),
+		'name'                  => __( 'Camps',                               'anticonferences' ),
+		'menu_name'             => _x( 'AntiConférences', 'Main Plugin menu', 'anticonferences' ),
+		'all_items'             => __( 'Tous les camps',                      'anticonferences' ),
+		'singular_name'         => __( 'Camp',                                'anticonferences' ),
+		'add_new'               => __( 'Ajouter',                             'anticonferences' ),
+		'add_new_item'          => __( 'Ajouter un nouveau camp',             'anticonferences' ),
+		'edit_item'             => __( 'Modifier le camp',                    'anticonferences' ),
+		'new_item'              => __( 'Nouveau camp',                        'anticonferences' ),
+		'view_item'             => __( 'Voir le camp',                        'anticonferences' ),
+		'search_items'          => __( 'Rechercher un camp',                  'anticonferences' ),
+		'not_found'             => __( 'Aucun camp trouvé',                   'anticonferences' ),
+		'not_found_in_trash'    => __( 'Aucun camp trouvé dans la corbeille', 'anticonferences' ),
+		'insert_into_item'      => __( 'Insérer dans le camp',                'anticonferences' ),
+		'uploaded_to_this_item' => __( 'Attaché à ce camp',                   'anticonferences' ),
+		'filter_items_list'     => __( 'Filtrer la liste des camps',          'anticonferences' ),
+		'items_list_navigation' => __( 'Navigation de la liste des camps',    'anticonferences' ),
+		'items_list'            => __( 'Liste des camps',                     'anticonferences' ),
+		'name_admin_bar'        => _x( 'Camp', 'Name Admin Bar',              'anticonferences' ),
 	);
 
 	$params = array(
 		'labels'               => $labels,
-		'description'          => __( 'Un festival présente les règles du jeu et la durée des AntiConférences', 'anticonferences' ),
+		'description'          => __( 'Un camp présente les règles du jeu des AntiConférences', 'anticonferences' ),
 		'public'               => true,
-		'query_var'            => 'ac_festival',
+		'query_var'            => 'ac_camp',
 		'rewrite'              => array(
-			'slug'             => 'a-c/festival',
+			'slug'             => 'a-c/camp',
 			'with_front'       => false
 		),
 		'has_archive'          =>'a-c',
@@ -92,19 +92,19 @@ function anticonferences_register_objects() {
 		'delete_with_user'     => false,
 		'can_export'           => true,
 		'show_in_rest'         => true,
-		'rest_base'            => 'ac-festivals',
+		'rest_base'            => 'ac-camps',
 	);
 
-	register_post_type( 'festivals', $params );
-	add_post_type_support( 'festivals', 'post-formats', array( 'aside', 'quote', 'status' ) );
+	register_post_type( 'camps', $params );
+	add_post_type_support( 'camps', 'post-formats', array( 'aside', 'quote', 'status' ) );
 
 	// Custom Fields
-	anticonferences_register_post_metas( 'festivals' );
+	anticonferences_register_post_metas( 'camps' );
 }
 add_action( 'init', 'anticonferences_register_objects' );
 
 function anticonferences_get_support( $feature = '' ) {
-	$supports = get_all_post_type_supports( 'festivals' );
+	$supports = get_all_post_type_supports( 'camps' );
 
 	if ( ! isset( $supports[ $feature ] ) ) {
 		return false;
@@ -118,15 +118,15 @@ function anticonferences_get_support( $feature = '' ) {
 }
 
 function anticonferences_sanitize_metas( $value = '', $meta_key = '' ) {
-	if ( '_festival_closing_date' === $meta_key ) {
+	if ( '_camp_closing_date' === $meta_key ) {
 		if ( ! empty( $value ) ) {
 			$value = strtotime( $value );
 		}
 
-	} elseif ( '_festival_votes_amount' === $meta_key ) {
+	} elseif ( '_camp_votes_amount' === $meta_key ) {
 		$value = absint( $value );
 
-	} elseif ( '_festival_slack_webhook' === $meta_key  ) {
+	} elseif ( '_camp_slack_webhook' === $meta_key  ) {
 		$value = esc_url_raw( $value );
 	}
 
@@ -135,7 +135,7 @@ function anticonferences_sanitize_metas( $value = '', $meta_key = '' ) {
 
 function anticonferences_register_temporary_post_metas( $data = array() ) {
 	// Add post metas temporarly.
-	if ( ! empty( $data['post_type'] ) && 'festivals' === $data['post_type'] ) {
+	if ( ! empty( $data['post_type'] ) && 'camps' === $data['post_type'] ) {
 		anticonferences_register_post_metas( 'post' );
 	}
 
@@ -151,7 +151,7 @@ function anticonferences_unregister_temporary_post_metas() {
 		unregister_meta_key( 'post', $meta_key );
 	}
 }
-add_action( 'save_post_festivals', 'anticonferences_unregister_temporary_post_metas' );
+add_action( 'save_post_camps', 'anticonferences_unregister_temporary_post_metas' );
 
 /**
  * Probably not needed..
@@ -178,11 +178,11 @@ function anticonferences_template_part( $slug, $name = '' ) {
 	load_template( $located, false );
 }
 
-function anticonferences_subjects_template() {
+function anticonferences_topics_template() {
 	// Remove the temporary filter immediately.
-	remove_filter( 'comments_template', 'anticonferences_subjects_template', 0 );
+	remove_filter( 'comments_template', 'anticonferences_topics_template', 0 );
 
-	return anticonferences()->tpl_dir . 'subjects-template.php';
+	return anticonferences()->tpl_dir . 'topics-template.php';
 }
 
 function anticonferences_mce_buttons( $buttons = array() ) {
@@ -201,7 +201,7 @@ function anticonferences_mce_buttons( $buttons = array() ) {
 }
 
 function anticonferences_preprocess_comment( $comment_data = array() ) {
-	if ( isset( $_POST['ac_comment_type'] ) && in_array( $_POST['ac_comment_type'], array( 'ac_subject', 'ac_support' ), true ) ) {
+	if ( isset( $_POST['ac_comment_type'] ) && in_array( $_POST['ac_comment_type'], array( 'ac_topic', 'ac_support' ), true ) ) {
 		$comment_data['comment_type'] = $_POST['ac_comment_type'];
 	}
 
@@ -209,9 +209,9 @@ function anticonferences_preprocess_comment( $comment_data = array() ) {
 }
 add_filter( 'preprocess_comment', 'anticonferences_preprocess_comment', 10, 1 );
 
-function anticonferences_subject_form_fields( $fields = array() ) {
+function anticonferences_topic_form_fields( $fields = array() ) {
 	unset( $fields['fields']['url'] );
-	$fields['comment_field'] = anticonferences_subject_get_editor();
+	$fields['comment_field'] = anticonferences_topic_get_editor();
 
 	return $fields;
 }
@@ -223,11 +223,11 @@ function anticonferences_comments_open( $return = false, $post_id = 0 ) {
 		$post = get_post( $post_id );
 	}
 
-	if ( 'festivals' === get_post_type( $post ) ) {
+	if ( 'camps' === get_post_type( $post ) ) {
 		// Temporary filters
 		if ( is_single() ) {
-			add_filter( 'comments_template',  'anticonferences_subjects_template', 0 );
-			add_filter( 'comment_id_fields',  'anticonferences_subject_type'         );
+			add_filter( 'comments_template',  'anticonferences_topics_template', 0 );
+			add_filter( 'comment_id_fields',  'anticonferences_topic_type'         );
 		}
 
 		$return = true;
@@ -252,7 +252,7 @@ function anticonferences_all_comments_count_query( $query = '' ) {
 	);
 
 	if ( $comments_count_query === join( '', $sql ) ) {
-		$query = str_replace( $sql['groupby'], sprintf( 'WHERE comment_type NOT IN( "ac_subject", "ac_support" ) %s', $sql['groupby'] ), $query );
+		$query = str_replace( $sql['groupby'], sprintf( 'WHERE comment_type NOT IN( "ac_topic", "ac_support" ) %s', $sql['groupby'] ), $query );
 	}
 
 	return $query;
@@ -270,7 +270,7 @@ add_filter( 'wp_count_comments', 'anticonferences_count_all_comments', 10, 2 );
 
 function anticonferences_parse_comment_query( WP_Comment_Query $comment_query ) {
 	if ( ! $comment_query->query_vars['post_ID'] && ! $comment_query->query_vars['post_id'] ) {
-		$not_in = array( 'ac_subject', 'ac_support' );
+		$not_in = array( 'ac_topic', 'ac_support' );
 
 		if ( ! $comment_query->query_vars['type__not_in'] || ! is_array( $comment_query->query_vars['type__not_in'] ) ) {
 			$comment_query->query_vars['type__not_in'] = explode( ',', $comment_query->query_vars['type__not_in'] );
@@ -282,19 +282,19 @@ function anticonferences_parse_comment_query( WP_Comment_Query $comment_query ) 
 add_action( 'parse_comment_query', 'anticonferences_parse_comment_query' );
 
 function anticonferences_notify_moderator( $maybe_notify = true, $comment_ID = 0 ) {
-	$subject = get_comment( $comment_ID );
+	$topic = get_comment( $comment_ID );
 
-	if ( ! isset( $subject->comment_type ) || 'ac_subject' !== $subject->comment_type ) {
+	if ( ! isset( $topic->comment_type ) || 'ac_topic' !== $topic->comment_type ) {
 		return $maybe_notify;
 	}
 
-	$slack_webhook = get_post_meta( $subject->comment_post_ID, '_festival_slack_webhook', true );
+	$slack_webhook = get_post_meta( $topic->comment_post_ID, '_camp_slack_webhook', true );
 
 	if ( ! $slack_webhook ) {
 		return $maybe_notify;
 	}
 
-	$payload = new AC_Slack_Payload( $subject );
+	$payload = new AC_Slack_Payload( $topic );
 
 	wp_remote_post( $slack_webhook, array(
 		'body' => $payload->get_json(),

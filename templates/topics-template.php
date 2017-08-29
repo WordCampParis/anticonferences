@@ -1,6 +1,6 @@
 <?php
 /**
- * Subjects template.
+ * Topics template.
  *
  * @since  1.0.0
  */
@@ -8,7 +8,7 @@
 
 <div id="comments" class="comments-area">
 
-	<?php anticonferences_subject_form(); ?>
+	<?php anticonferences_topic_form(); ?>
 
 	<?php if ( have_comments() ) : ?>
 
@@ -18,13 +18,13 @@
 					'avatar_size' => 100,
 					'style'       => 'ol',
 					'short_ping'  => true,
-					'type'        => 'ac_subject',
-					'walker'      => new AC_Walker_Subject,
+					'type'        => 'ac_topic',
+					'walker'      => new AC_Walker_Topic,
 				) );
 			?>
 		</ol>
 
-	<?php elseif ( anticonferences_subjects_closed() ) : ?>
+	<?php elseif ( anticonferences_topics_closed() ) : ?>
 
 		<p class="no-comments"><?php _e( 'La période de proposition des sujets est terminée.', 'anticonferences' ); ?></p>
 

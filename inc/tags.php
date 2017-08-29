@@ -8,7 +8,7 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-function anticonferences_subject_get_editor() {
+function anticonferences_topic_get_editor() {
 	$args = array(
 		'textarea_name' => 'comment',
 		'wpautop'       => true,
@@ -40,9 +40,9 @@ function anticonferences_subject_get_editor() {
 	return $editor;
 }
 
-function anticonferences_subject_form() {
+function anticonferences_topic_form() {
 	// Temporarly filter the comment form default arguments.
-	add_filter( 'comment_form_defaults', 'anticonferences_subject_form_fields' );
+	add_filter( 'comment_form_defaults', 'anticonferences_topic_form_fields' );
 
 	comment_form( array(
 		'title_reply'    => __( 'Proposer un nouveau sujet', 'anticonferences' ),
@@ -50,16 +50,16 @@ function anticonferences_subject_form() {
 	) );
 
 	// Remove the temporary filter
-	remove_filter( 'comment_form_defaults', 'anticonferences_subject_form_fields' );
+	remove_filter( 'comment_form_defaults', 'anticonferences_topic_form_fields' );
 }
 
-function anticonferences_subject_type( $submit_fields = '' ) {
-	$submit_fields .= '<input type="hidden" value="ac_subject" name="ac_comment_type"/>';
+function anticonferences_topic_type( $submit_fields = '' ) {
+	$submit_fields .= '<input type="hidden" value="ac_topic" name="ac_comment_type"/>';
 	return $submit_fields;
 }
 
-function anticonferences_subject_support( $link = '', $args = array(), WP_Comment $comment ) {
-	// Subjects need to be approved to be supported.
+function anticonferences_topic_support( $link = '', $args = array(), WP_Comment $comment ) {
+	// Topics need to be approved to be supported.
 	if ( ! $comment->comment_approved ) {
 		return;
 	}
@@ -67,9 +67,9 @@ function anticonferences_subject_support( $link = '', $args = array(), WP_Commen
 	return esc_html__( 'Supporter ce sujet', 'anticonferences' );
 }
 
-function anticonferences_subjects_closed() {
+function anticonferences_topics_closed() {
 	$closed   = false;
-	$end_date = (int) get_post_meta( get_the_ID(), '_festival_closing_date', true );
+	$end_date = (int) get_post_meta( get_the_ID(), '_camp_closing_date', true );
 
 	if ( ! $end_date ) {
 		return $closed;

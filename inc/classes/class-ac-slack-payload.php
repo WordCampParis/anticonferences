@@ -24,18 +24,18 @@ class AC_Slack_Payload {
 	 *
 	 * @since  1.0.0
 	 *
-	 * @param WP_Comment $subject The subject Object.
+	 * @param WP_Comment $topic The topic Object.
 	 */
-	public function __construct( WP_Comment $subject ) {
-		$festival = get_post_field( 'post_title', $subject->comment_post_ID );
+	public function __construct( WP_Comment $topic ) {
+		$camp = get_post_field( 'post_title', $topic->comment_post_ID );
 
 		$title = sprintf(
 			__( '[%1$s] Nouveau Sujet posté : %2$s', 'anticonferences' ),
-			$festival,
+			$camp,
 			sprintf( '<%1$s|%2$s>',
 				esc_url_raw( add_query_arg( array(
 					'action' => 'editcomment',
-					'c' => $subject->comment_ID
+					'c' => $topic->comment_ID
 				), admin_url( 'comment.php' ) ) ),
 				esc_html__( 'Modérer', 'anticonferences')
 			)
@@ -49,8 +49,8 @@ class AC_Slack_Payload {
 		);
 
 		$this->attachments[0]->fields[] = (object) array(
-			'title' => sprintf( __( 'Auteur : %s', 'anticonferences' ), esc_html( $subject->comment_author ) ),
-			'value' => wp_trim_words( $subject->comment_content, 30 ),
+			'title' => sprintf( __( 'Auteur : %s', 'anticonferences' ), esc_html( $topic->comment_author ) ),
+			'value' => wp_trim_words( $topic->comment_content, 30 ),
 			'short' => false,
 		);
 	}

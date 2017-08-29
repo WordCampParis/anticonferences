@@ -8,10 +8,10 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-function anticonferences_admin_register_metabox( $festival = null ) {
-	$pt = get_post_type( $festival );
+function anticonferences_admin_register_metabox( $camp = null ) {
+	$pt = get_post_type( $camp );
 
-	if ( 'festivals' !== $pt ) {
+	if ( 'camps' !== $pt ) {
 		return;
 	}
 
@@ -20,7 +20,7 @@ function anticonferences_admin_register_metabox( $festival = null ) {
 	$metaboxes = array(
 		'ac-details-metabox' => (object) array(
 			'id'    => 'ac-details-metabox',
-			'title' => __( 'Details du festival', 'anticonferences' ),
+			'title' => __( 'Details du camp', 'anticonferences' ),
 			'cb'    => 'anticonferences_admin_details_metabox',
 			'ctxt'  => 'normal',
 			'prio'  => 'high',
@@ -44,10 +44,10 @@ function anticonferences_admin_register_metabox( $festival = null ) {
 	}
 }
 
-function anticonferences_admin_details_metabox( $festival = null ) {
-	$pt = get_post_type( $festival );
+function anticonferences_admin_details_metabox( $camp = null ) {
+	$pt = get_post_type( $camp );
 
-	if ( 'festivals' !== $pt ) {
+	if ( 'camps' !== $pt ) {
 		printf( '<p class="notice error">%s</p>', esc_html__( 'Le type de contenu ne correspond pas à celui attentdu.', 'anticonferences' ) );
 		return;
 	}
@@ -55,14 +55,14 @@ function anticonferences_admin_details_metabox( $festival = null ) {
 	$metas = get_registered_meta_keys( $pt );
 
 	if ( ! $metas ) {
-		printf( '<p class="notice error">%s</p>', esc_html__( 'Les détails ne sont pas disponibles pour ce festival', 'anticonferences' ) );
+		printf( '<p class="notice error">%s</p>', esc_html__( 'Les détails ne sont pas disponibles pour ce camp', 'anticonferences' ) );
 		return;
 	}
 
-	$customs      = get_post_custom( $festival->ID );
+	$customs      = get_post_custom( $camp->ID );
 	$placeholders = apply_filters( 'anticonferences_meta_placeholders', array(
-		'_festival_closing_date'  => 'YYYY-MM-DD HH:II',
-		'_festival_slack_webhook' => __( 'URL du webhook Slack', 'anticonferences' ),
+		'_camp_closing_date'  => 'YYYY-MM-DD HH:II',
+		'_camp_slack_webhook' => __( 'URL du webhook Slack', 'anticonferences' ),
 	) );
 
 	$output = '';
@@ -77,7 +77,7 @@ function anticonferences_admin_details_metabox( $festival = null ) {
 		if ( isset( $customs[ $key ] ) ) {
 			$value = reset( $customs[ $key ] );
 
-			if ( '_festival_closing_date' === $key && is_numeric( $value ) ) {
+			if ( '_camp_closing_date' === $key && is_numeric( $value ) ) {
 				$value = date_i18n( 'Y-m-d H:i', $value );
 			}
 		}
@@ -104,7 +104,7 @@ function anticonferences_admin_details_metabox( $festival = null ) {
 	echo '<table class="fixed" width="100%">' . $output . '</table>';
 }
 
-function anticonferences_admin_format_metabox( $festival = null ) {
+function anticonferences_admin_format_metabox( $camp = null ) {
 	$theme_pf     = get_theme_support( 'post-formats' );
 	$theme_pf     = reset( $theme_pf );
 	$supported_pf = anticonferences_get_support( 'post-formats' );
@@ -117,7 +117,7 @@ function anticonferences_admin_format_metabox( $festival = null ) {
 		$default = reset( $post_formats );
 	}
 
-	$post_format = get_post_format( $festival->ID );
+	$post_format = get_post_format( $camp->ID );
 
 	if ( ! $post_format ) {
 		$post_format = $default;

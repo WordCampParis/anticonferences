@@ -1,8 +1,8 @@
 <?php
 /**
- * Subject Walker
+ * Topic Walker
  *
- * Adapts the Comments Walker to our subject needs.
+ * Adapts the Comments Walker to our topic needs.
  *
  * @since  1.0.0
  *
@@ -17,9 +17,9 @@ if ( ! class_exists( 'Walker_Comment' ) ) {
 	require_once ABSPATH . WPINC . '/class-walker-comment.php';
 }
 
-class AC_Walker_Subject extends Walker_Comment {
+class AC_Walker_Topic extends Walker_Comment {
 	/**
-	 * Outputs a single subject.
+	 * Outputs a single topic.
 	 *
 	 * @since  1.0.0
 	 *
@@ -28,19 +28,19 @@ class AC_Walker_Subject extends Walker_Comment {
 	 * @param array      $args    An array of arguments.
 	 */
 	protected function comment( $comment, $depth, $args ) {
-		add_filter( 'comment_reply_link', 'anticonferences_subject_support', 10, 3 );
+		add_filter( 'comment_reply_link', 'anticonferences_topic_support', 10, 3 );
 
 		ob_start();
 		parent::comment( $comment, $depth, $args );
-		$subject = ob_get_clean();
+		$topic = ob_get_clean();
 
-		remove_filter( 'comment_reply_link', 'anticonferences_subject_support', 10, 3 );
+		remove_filter( 'comment_reply_link', 'anticonferences_topic_support', 10, 3 );
 
-		$this->subject( $subject, true );
+		$this->topic( $topic, true );
 	}
 
 	/**
-	 * Outputs a single subject in the HTML5 format.
+	 * Outputs a single topic in the HTML5 format.
 	 *
 	 * @since  1.0.0
 	 *
@@ -49,39 +49,39 @@ class AC_Walker_Subject extends Walker_Comment {
 	 * @param array      $args    An array of arguments.
 	 */
 	protected function html5_comment( $comment, $depth, $args ) {
-		add_filter( 'comment_reply_link', 'anticonferences_subject_support', 10, 3 );
+		add_filter( 'comment_reply_link', 'anticonferences_topic_support', 10, 3 );
 
 		ob_start();
 		parent::html5_comment( $comment, $depth, $args );
-		$subject = ob_get_clean();
+		$topic = ob_get_clean();
 
-		remove_filter( 'comment_reply_link', 'anticonferences_subject_support', 10, 3 );
+		remove_filter( 'comment_reply_link', 'anticonferences_topic_support', 10, 3 );
 
-		$this->subject( $subject, true );
+		$this->topic( $topic, true );
 	}
 
 	/**
-	 * Replaces the awaiting approval message to fit subject context.
+	 * Replaces the awaiting approval message to fit topic context.
 	 *
 	 * @since  1.0.0
 	 *
-	 * @param  [type]  $subject [description]
+	 * @param  [type]  $topic [description]
 	 * @param  boolean $echo     [description]
 	 * @return [type]            [description]
 	 */
-	public function subject( $subject, $echo = false ) {
-		$subject = preg_replace(
+	public function topic( $topic, $echo = false ) {
+		$topic = preg_replace(
 			'/<p class=\"comment-awaiting-moderation\">(.*?)<\/p>/',
-			sprintf ( '<p class="subject-awaiting-moderation">%s</p>',
+			sprintf ( '<p class="topic-awaiting-moderation">%s</p>',
 				__( 'Votre sujet est en attente de modération. Vous seul pouvez le voir pour le moment.', 'anticonferences' )
 			),
-			$subject
+			$topic
 		);
 
 		if ( ! $echo ) {
-			return $subject;
+			return $topic;
 		}
 
-		echo $subject;
+		echo $topic;
 	}
 }
