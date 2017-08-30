@@ -243,7 +243,7 @@ function anticonferences_all_comments_count_query( $query = '' ) {
 	// Remove the temporary filter immediately.
 	remove_filter( 'query', 'anticonferences_all_comments_count_query' );
 
-	$comments_count_query = str_replace( array( "\n", "\t" ), '', $query );
+	$comments_count_query = str_replace( array( "\n", "\t", "\r" ), '', $query );
 	$comments_count_query = trim( $comments_count_query );
 	$sql = array(
 		'select'  => 'SELECT comment_approved, COUNT( * ) AS total',
