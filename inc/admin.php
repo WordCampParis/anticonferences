@@ -181,3 +181,55 @@ function anticonferences_admin_box_area( $camp = null ) {
 	<?php
 }
 add_action( 'edit_form_after_title', 'anticonferences_admin_box_area', 10, 1 );
+
+function anticonferences_admin_load_edit_comments() {
+	global $typenow;
+
+	if ( ! empty( $_GET['post_type'] ) || empty( $_GET ) ) {
+		return;
+	}
+
+	$get_keys = array_keys( $_GET );
+
+	if ( 'load-comment.php' === current_action() ) {
+		if ( empty( $_GET['c'] ) ) {
+			return;
+		}
+
+		$comment = get_comment( $_GET['c'] );
+
+		if ( 'ac_topic' !== $comment->comment_type ) {
+			return;
+		}
+
+		$post_type = 'camps';
+	} else {
+		$keys = array( 'p', 'comment_status' );
+		$match_keys = array_intersect( $get_keys, $keys );
+
+		if ( ! $match_keys ) {
+			return;
+		}
+
+		$post_type = get_post_type( absint( $_GET['p'] ) );
+		if ( empty( $post_type ) || 'camps' !== $post_type ) {
+			return;
+		}
+	}
+
+	$typenow = $post_type;
+	get_current_screen()->post_type = $post_type;
+}
+add_action( 'load-edit-comments.php', 'anticonferences_admin_load_edit_comments', 10 );
+add_action( 'load-comment.php',       'anticonferences_admin_load_edit_comments', 10 );
+
+function anticonferences_admin_head() {
+	global $parent_file;
+
+	$ac_parent = add_query_arg( 'post_type', 'camps', 'edit.php' );
+
+	if ( 'camps' === get_current_screen()->post_type && $ac_parent !== $parent_file ) {
+		$parent_file = $ac_parent;
+	}
+}
+add_action( 'admin_head', 'anticonferences_admin_head', 10 );
