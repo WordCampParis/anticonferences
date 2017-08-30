@@ -191,6 +191,7 @@ function anticonferences_admin_load_edit_comments() {
 
 	$get_keys = array_keys( $_GET );
 
+	// Editing a single Topic
 	if ( 'load-comment.php' === current_action() ) {
 		if ( empty( $_GET['c'] ) ) {
 			return;
@@ -203,6 +204,9 @@ function anticonferences_admin_load_edit_comments() {
 		}
 
 		$post_type = 'camps';
+		anticonferences()->admin_inline_script = array( 'editTopic' => __( 'Modifier le sujet', 'anticonferences' ) );
+
+	// Moderating Topics
 	} else {
 		$keys = array( 'p', 'comment_status' );
 		$match_keys = array_intersect( $get_keys, $keys );
@@ -215,6 +219,12 @@ function anticonferences_admin_load_edit_comments() {
 		if ( empty( $post_type ) || 'camps' !== $post_type ) {
 			return;
 		}
+
+		anticonferences()->admin_inline_script = array(
+			'moderateTopics' => esc_html__( 'Sujets proposés pour {l}', 'anticonferences' ),
+			'searchTopics'   => esc_html__( 'Rechercher un sujet', 'anticonferences' ),
+			'topicColumn'    => esc_html__( 'Sujet', 'anticonferences' ),
+		);
 	}
 
 	$typenow = $post_type;
@@ -240,5 +250,25 @@ function anticonferences_admin_enqueue_scripts() {
 	}
 
 	wp_enqueue_style( 'ac-admin-style', anticonferences_get_stylesheet( 'admin' ), array(), anticonferences()->version );
+
+	if ( isset( anticonferences()->admin_inline_script ) ) {
+		wp_add_inline_script( 'common', sprintf( '
+			( function( $ ) {
+				$( document ).ready( function() {
+					var text = JSON.parse( \'%s\' );
+
+					if ( $( \'.edit-comments-php h1.wp-heading-inline\' ).length ) {
+						var link = $( \'.edit-comments-php h1.wp-heading-inline\' ).find( \'a\' ).get( 0 ).outerHTML;
+
+						$( \'.edit-comments-php h1.wp-heading-inline\' ).html( text.moderateTopics.replace( \'{l}\', link ) );
+						$( \'#comments-form #search-submit\' ).val( text.searchTopics );
+						$( \'#comments-form .wp-list-table th.column-comment\').html( text.topicColumn );
+					} else if ( $( \'.comment-php .wrap h1\' ).length ) {
+						$( \'.comment-php .wrap h1\' ).html( text.editTopic );
+					}
+				} );
+			} )( jQuery );
+		', json_encode( anticonferences()->admin_inline_script ) ) );
+	}
 }
 add_action( 'admin_enqueue_scripts', 'anticonferences_admin_enqueue_scripts' );
