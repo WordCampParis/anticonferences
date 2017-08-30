@@ -59,7 +59,7 @@ function anticonferences_topic_form() {
 	add_filter( 'comment_form_defaults', 'anticonferences_topic_form_fields' );
 
 	comment_form( array(
-		'title_reply'    => '',
+		'title_reply'    => __( 'Proposez un nouveau sujet', 'anticonferences' ),
 		'label_submit'   => __( 'Publier', 'anticonferences' ),
 	) );
 
@@ -69,7 +69,8 @@ function anticonferences_topic_form() {
 
 function anticonferences_topic_type( $submit_fields = '' ) {
 	$submit_fields .= '<input type="hidden" value="ac_topic" name="ac_comment_type"/>';
-	return $submit_fields;
+
+	return '<input type="reset" value="' . esc_attr__( 'Abandonner', 'anticonferences' ) . '"/>' . $submit_fields;
 }
 
 function anticonferences_topic_support( $link = '', $args = array(), WP_Comment $comment ) {

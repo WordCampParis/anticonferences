@@ -10,7 +10,9 @@
 
 	<?php anticonferences_topics_toolbar(); ?>
 
-	<?php anticonferences_topic_form(); ?>
+	<div id="respond-container">
+		<?php anticonferences_topic_form(); ?>
+	</div>
 
 	<?php if ( have_comments() ) : ?>
 
