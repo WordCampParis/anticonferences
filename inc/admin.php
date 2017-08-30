@@ -204,7 +204,10 @@ function anticonferences_admin_load_edit_comments() {
 		}
 
 		$post_type = 'camps';
-		anticonferences()->admin_inline_script = array( 'editTopic' => __( 'Modifier le sujet', 'anticonferences' ) );
+		anticonferences()->admin_inline_script = array(
+			'editTopic' => esc_html__( 'Modifier le sujet', 'anticonferences' ),
+			'titletag'  => esc_html__( 'Modification d\'un sujet', 'anticonferences' ),
+		);
 
 	// Moderating Topics
 	} else {
@@ -224,14 +227,30 @@ function anticonferences_admin_load_edit_comments() {
 			'moderateTopics' => esc_html__( 'Sujets proposés pour {l}', 'anticonferences' ),
 			'searchTopics'   => esc_html__( 'Rechercher un sujet', 'anticonferences' ),
 			'topicColumn'    => esc_html__( 'Sujet', 'anticonferences' ),
+			'titletag'       => esc_html__( 'Modérations des sujets', 'anticonferences' ),
 		);
 	}
 
 	$typenow = $post_type;
 	get_current_screen()->post_type = $post_type;
+
+	add_filter( 'admin_title', 'anticonferences_admin_title', 10, 1 );
 }
 add_action( 'load-edit-comments.php', 'anticonferences_admin_load_edit_comments', 10 );
 add_action( 'load-comment.php',       'anticonferences_admin_load_edit_comments', 10 );
+
+function anticonferences_admin_title( $admin_title = '' ) {
+	$title = explode( '&lsaquo;', $admin_title );
+
+	$ac = anticonferences();
+
+	if ( isset( $ac->admin_inline_script['titletag'] ) && isset( $title[1] ) ) {
+		$title[0]    = $ac->admin_inline_script['titletag'];
+		$admin_title = join( ' &lsaquo;', $title );
+	}
+
+	return $admin_title;
+}
 
 function anticonferences_admin_head() {
 	global $parent_file;
