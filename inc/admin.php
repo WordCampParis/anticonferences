@@ -51,7 +51,7 @@ function anticonferences_admin_register_metabox( $camp = null ) {
 			'title' => _x( 'Format', 'post format', 'anticonferences' ),
 			'cb'    => 'anticonferences_admin_format_metabox',
 			'ctxt'  => 'side',
-			'prio'  => 'low',
+			'prio'  => 'default',
 		);
 	}
 

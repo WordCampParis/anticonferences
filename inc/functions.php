@@ -87,7 +87,7 @@ function anticonferences_register_objects() {
 		'show_in_admin_bar'    => current_user_can( 'edit_posts' ),
 		'register_meta_box_cb' => 'anticonferences_admin_register_metabox',
 		'menu_icon'            => 'dashicons-marker',
-		'supports'             => array( 'title', 'editor', 'comments', 'revisions', 'post-formats' ),
+		'supports'             => array( 'title', 'editor', 'comments', 'revisions', 'post-formats', 'thumbnail' ),
 		'map_meta_cap'         => true,
 		'delete_with_user'     => false,
 		'can_export'           => true,
