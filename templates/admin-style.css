@@ -1,0 +1,7 @@
+body.post-type-camps #the-comment-list .row-actions .reply,
+body.post-type-camps #the-comment-list .row-actions .quickedit,
+body.post-type-camps #aniticonferences-sortables #add-new-comment,
+body.post-type-camps #aniticonferences-sortables #show-comments a:first-child,
+body.post-type-camps #comments-form .tablenav.top .actions:not( .bulkactions ) {
+	display: none;
+}

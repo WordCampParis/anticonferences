@@ -178,6 +178,29 @@ function anticonferences_template_part( $slug, $name = '' ) {
 	load_template( $located, false );
 }
 
+function anticonferences_get_stylesheet( $type = 'front' ) {
+	$located = locate_template( "anticonferences/{$type}-style.css", false );
+
+	if ( ! $located ) {
+		$located = anticonferences()->tpl_dir . "{$type}-style.css";
+	}
+
+	// Make sure Microsoft is happy...
+	$slashed_located     = str_replace( '\\', '/', $located );
+	$slashed_content_dir = str_replace( '\\', '/', WP_CONTENT_DIR );
+	$slashed_plugin_dir  = str_replace( '\\', '/', anticonferences()->dir );
+
+	// Should allways be the case for regular configs
+	if ( false !== strpos( $slashed_located, $slashed_content_dir ) ) {
+		$located = str_replace( $slashed_content_dir, content_url(), $slashed_located );
+
+	// If not, Plugin might be symlinked, so let's try this
+	} else {
+		$located = str_replace( $slashed_plugin_dir, anticonferences()->url, $slashed_located );
+	}
+	return $located;
+}
+
 function anticonferences_topics_template() {
 	// Remove the temporary filter immediately.
 	remove_filter( 'comments_template', 'anticonferences_topics_template', 0 );

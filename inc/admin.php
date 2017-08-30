@@ -233,3 +233,12 @@ function anticonferences_admin_head() {
 	}
 }
 add_action( 'admin_head', 'anticonferences_admin_head', 10 );
+
+function anticonferences_admin_enqueue_scripts() {
+	if ( 'camps' !== get_current_screen()->post_type ) {
+		return;
+	}
+
+	wp_enqueue_style( 'ac-admin-style', anticonferences_get_stylesheet( 'admin' ), array(), anticonferences()->version );
+}
+add_action( 'admin_enqueue_scripts', 'anticonferences_admin_enqueue_scripts' );
