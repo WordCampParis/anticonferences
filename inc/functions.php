@@ -232,6 +232,19 @@ function anticonferences_preprocess_comment( $comment_data = array() ) {
 }
 add_filter( 'preprocess_comment', 'anticonferences_preprocess_comment', 10, 1 );
 
+function anticonferences_pre_comment_approved( $approved = 0, $comment_data = array() ) {
+	if ( ! $approved ) {
+		return $approved;
+	}
+
+	if ( isset( $comment_data['comment_type'] ) && 'ac_topic' === $comment_data['comment_type'] ) {
+		$approved = 0;
+	}
+
+	return $approved;
+}
+add_filter( 'pre_comment_approved', 'anticonferences_pre_comment_approved', 10, 2 );
+
 function anticonferences_topic_form_fields( $fields = array() ) {
 	unset( $fields['fields']['url'] );
 	$fields['comment_field'] = anticonferences_topic_get_editor();
