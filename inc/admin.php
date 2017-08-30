@@ -227,7 +227,7 @@ function anticonferences_admin_load_edit_comments() {
 			'moderateTopics' => esc_html__( 'Sujets proposés pour {l}', 'anticonferences' ),
 			'searchTopics'   => esc_html__( 'Rechercher un sujet', 'anticonferences' ),
 			'topicColumn'    => esc_html__( 'Sujet', 'anticonferences' ),
-			'titletag'       => esc_html__( 'Modérations des sujets', 'anticonferences' ),
+			'titletag'       => esc_html__( 'Modération des sujets', 'anticonferences' ),
 		);
 	}
 
@@ -291,3 +291,24 @@ function anticonferences_admin_enqueue_scripts() {
 	}
 }
 add_action( 'admin_enqueue_scripts', 'anticonferences_admin_enqueue_scripts' );
+
+function anticonferences_notify_topic_author( WP_Comment $topic ) {
+	if ( ! isset( $topic->comment_type ) || 'ac_topic' !== $topic->comment_type ) {
+		return;
+	}
+
+	$blogname        = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
+	$topic_content   = wp_specialchars_decode( $topic->comment_content );
+
+	$notify_message  = __( 'La proposition de sujet suivante a été publiée :', 'anticonferences' ) . "\r\n";
+	$notify_message .= esc_html( wp_trim_words( $topic_content, 30 ) ) . "\r\n\r\n";
+	$notify_message .= __( 'Vous pouvez voter pour elle en vous rendant à cette adresse :', 'anticonferences' ) . "\r\n";
+	$notify_message .= get_comment_link( $topic ) . "\r\n";
+	$notify_message .= __( 'Partagez-la pour gagner des votes !', 'anticonferences' ) . "\r\n";
+
+	$camp_title = get_post_field( 'post_title', $topic->comment_post_ID );
+	$subject    = sprintf( __('[%s] Sujet publié', 'anticonferences' ), $camp_title );
+
+	@wp_mail( $topic->comment_author_email, wp_specialchars_decode( $subject ), $notify_message );
+}
+add_action( 'comment_unapproved_to_approved', 'anticonferences_notify_topic_author', 10, 1 );
