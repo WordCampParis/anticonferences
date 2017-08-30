@@ -8,6 +8,8 @@
 
 <div id="comments" class="comments-area">
 
+	<?php anticonferences_topics_toolbar(); ?>
+
 	<?php anticonferences_topic_form(); ?>
 
 	<?php if ( have_comments() ) : ?>

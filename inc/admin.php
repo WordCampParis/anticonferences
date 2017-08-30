@@ -268,7 +268,7 @@ function anticonferences_admin_enqueue_scripts() {
 		return;
 	}
 
-	wp_enqueue_style( 'ac-admin-style', anticonferences_get_stylesheet( 'admin' ), array(), anticonferences()->version );
+	wp_enqueue_style( 'ac-admin-style', anticonferences_get_asset( 'admin' ), array(), anticonferences()->version );
 
 	if ( isset( anticonferences()->admin_inline_script ) ) {
 		wp_add_inline_script( 'common', sprintf( '

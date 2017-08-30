@@ -1,0 +1,36 @@
+body.single-camps #respond {
+	display: none;
+}
+
+/* Filter bar */
+#topics-toolbar {
+	display: inline-block;
+	position: relative;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	margin: 12px 0 25px;
+	padding: 0 10px;
+	width: 100%;
+	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+	box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+	border: 1px solid #e5e5e5;
+	background: #fff;
+	color: #555;
+	font-size: 13px;
+}
+
+#topics-toolbar .filter-items {
+	float: left;
+}
+
+#topics-toolbar .filter-links {
+	display: inline-block;
+	margin: 0;
+}
+
+#topics-toolbar .filter-links li {
+	display: inline-block;
+	margin: 0 10px;
+	padding: 15px 0;
+}

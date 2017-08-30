@@ -178,11 +178,11 @@ function anticonferences_template_part( $slug, $name = '' ) {
 	load_template( $located, false );
 }
 
-function anticonferences_get_stylesheet( $type = 'front' ) {
-	$located = locate_template( "anticonferences/{$type}-style.css", false );
+function anticonferences_get_asset( $context = 'front', $type = 'css' ) {
+	$located = locate_template( "anticonferences/{$context}.{$type}", false );
 
 	if ( ! $located ) {
-		$located = anticonferences()->tpl_dir . "{$type}-style.css";
+		$located = anticonferences()->tpl_dir . "{$context}.{$type}";
 	}
 
 	// Make sure Microsoft is happy...
@@ -339,3 +339,17 @@ function anticonferences_notify_moderator( $maybe_notify = true, $comment_ID = 0
 	return false;
 }
 add_filter( 'notify_moderator', 'anticonferences_notify_moderator', 10, 2 );
+
+function anticonferences_enqueue_assets() {
+	if ( ! is_singular( 'camps' ) ){
+		return;
+	}
+
+	wp_enqueue_style( 'ac-front-style', anticonferences_get_asset(), array(), anticonferences()->version );
+	wp_enqueue_script( 'ac-front-script', anticonferences_get_asset( 'front', 'js' ), array( 'jquery' ), anticonferences()->version, true );
+
+	if ( get_option( 'thread_comments' ) ) {
+		wp_dequeue_script( 'comment-reply' );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'anticonferences_enqueue_assets', 20 );

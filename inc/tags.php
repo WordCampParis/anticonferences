@@ -40,12 +40,26 @@ function anticonferences_topic_get_editor() {
 	return $editor;
 }
 
+function anticonferences_topics_toolbar() {
+	?>
+	<div id="topics-toolbar">
+		<ul class="filter-links">
+			<li id="ac-new-topic">
+				<button class="button button-primary">
+					<span class="label"><?php esc_html_e( 'Nouveau sujet', 'anticonferences' ); ?></span>
+				</button>
+			</li>
+		</ul>
+	</div>
+	<?php
+}
+
 function anticonferences_topic_form() {
 	// Temporarly filter the comment form default arguments.
 	add_filter( 'comment_form_defaults', 'anticonferences_topic_form_fields' );
 
 	comment_form( array(
-		'title_reply'    => __( 'Proposer un nouveau sujet', 'anticonferences' ),
+		'title_reply'    => '',
 		'label_submit'   => __( 'Publier', 'anticonferences' ),
 	) );
 
