@@ -16,6 +16,7 @@ function anticonferences_admin_register_metabox( $camp = null ) {
 	}
 
 	remove_meta_box( 'commentstatusdiv', get_current_screen(), 'normal' );
+	remove_meta_box( 'commentsdiv', get_current_screen(), 'normal' );
 
 	$metaboxes = array(
 		'ac-details-metabox' => (object) array(
@@ -26,6 +27,21 @@ function anticonferences_admin_register_metabox( $camp = null ) {
 			'prio'  => 'high',
 		),
 	);
+
+	if ( isset( $camp->ID ) ) {
+		$topics_count = wp_count_comments( $camp->ID );
+
+		if ( ! empty( $topics_count->total_comments ) ) {
+			$metaboxes['commentsdiv'] = (object) array(
+				'id'    => 'commentsdiv',
+				'title' => __( 'Sujets proposés', 'anticonferences' ),
+				'cb'    => 'post_comment_meta_box',
+				'ctxt'  => 'aniticonferences',
+				'prio'  => 'high',
+			);
+		}
+	}
+
 
 	if ( current_theme_supports( 'post-formats' ) ) {
 		remove_meta_box( 'formatdiv', get_current_screen(), 'side' );
@@ -137,3 +153,31 @@ function anticonferences_admin_format_metabox( $camp = null ) {
 	</div>
 	<?php
 }
+
+function anticonferences_admin_box_area( $camp = null ) {
+	if ( empty( $camp->ID ) ) {
+		return;
+	}
+
+	$topics_count = wp_count_comments( $camp->ID );
+
+	// Do not display the custom Metabox area when no topics.
+	if ( empty( $topics_count->total_comments ) ) {
+		return;
+	}
+	?>
+	<br class="clear" />
+	<div id="postbox-container-0" class="postbox-container">
+
+		<?php
+		/**
+		 * Add a custom Metabox area so that topics are
+		 * listed first.
+		 */
+		do_meta_boxes( null, 'aniticonferences', $camp ); ?>
+
+	</div>
+	<br class="clear" />
+	<?php
+}
+add_action( 'edit_form_after_title', 'anticonferences_admin_box_area', 10, 1 );
