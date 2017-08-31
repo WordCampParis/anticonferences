@@ -214,7 +214,7 @@ function anticonferences_admin_load_edit_comments() {
 		$keys = array( 'p', 'comment_status' );
 		$match_keys = array_intersect( $get_keys, $keys );
 
-		if ( ! $match_keys ) {
+		if ( ! $match_keys || 2 !== count( $match_keys ) ) {
 			return;
 		}
 

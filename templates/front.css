@@ -1,3 +1,13 @@
+/* Utilities */
+body.single-camps .screen-reader-text {
+	clip: rect(1px, 1px, 1px, 1px);
+	height: 1px;
+	overflow: hidden;
+	position: absolute !important;
+	width: 1px;
+	word-wrap: normal !important;
+}
+
 /* Filter bar */
 #topics-toolbar {
 	display: inline-block;
@@ -31,8 +41,9 @@
 	padding: 15px 0;
 }
 
-/* New Topic Form */
-body.single-camps #respond-container {
+/* Topic Forms */
+body.single-camps #respond-container,
+body.single-camps #support-container {
 	display: none;
 }
 
@@ -94,6 +105,10 @@ body.single-camps .camp-modal #commentform input[type=reset]:hover {
 	text-decoration: none;
 }
 
+body.single-camps #support-container.active {
+	display: block;
+}
+
 /* Topics list */
 .topic-awaiting-moderation {
 	border-left-width: 4px;
@@ -103,6 +118,47 @@ body.single-camps .camp-modal #commentform input[type=reset]:hover {
 	font-size: 90%;
 	font-style: italic;
 	padding-left: 0.5em;
+}
+
+body.single-camps #comments span.ac-loved,
+body.single-camps #comments span.ac-love {
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	background-color: transparent;
+	background-repeat: no-repeat;
+	-webkit-background-size: 24px 24px;
+	background-size: 24px;
+	background-position: left;
+	-webkit-transition: background .1s ease-in;
+	transition: background .1s ease-in;
+	vertical-align: middle;
+}
+
+body.single-camps #comments span.ac-loved,
+body.single-camps #comments button:hover span.ac-love,
+body.single-camps #comments button.ac-heart.selected {
+	background-image: url( "data:image/svg+xml;charset=utf8,%3Csvg%20fill%3D%22%23e8596f%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M0%200h24v24H0z%22%20fill%3D%22none%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2021.35l-1.45-1.32C5.4%2015.36%202%2012.28%202%208.5%202%205.42%204.42%203%207.5%203c1.74%200%203.41.81%204.5%202.09C13.09%203.81%2014.76%203%2016.5%203%2019.58%203%2022%205.42%2022%208.5c0%203.78-3.4%206.86-8.55%2011.54L12%2021.35z%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+body.single-camps #comments span.ac-love {
+	background-image: url( "data:image/svg+xml;charset=utf8,%3Csvg%20fill%3D%22%23e8596f%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M0%200h24v24H0z%22%20fill%3D%22none%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16.5%203c-1.74%200-3.41.81-4.5%202.09C10.91%203.81%209.24%203%207.5%203%204.42%203%202%205.42%202%208.5c0%203.78%203.4%206.86%208.55%2011.54L12%2021.35l1.45-1.32C18.6%2015.36%2022%2012.28%2022%208.5%2022%205.42%2019.58%203%2016.5%203zm-4.4%2015.55l-.1.1-.1-.1C7.14%2014.24%204%2011.39%204%208.5%204%206.5%205.5%205%207.5%205c1.54%200%203.04.99%203.57%202.36h1.87C13.46%205.99%2014.96%205%2016.5%205c2%200%203.5%201.5%203.5%203.5%200%202.89-3.14%205.74-7.9%2010.05z%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+body.single-camps #comments button.ac-support-button,
+body.single-camps #comments button.ac-heart {
+	background: #fff;
+	border: none;
+	box-shadow: none;
+	color: #fff;
+	padding: 0;
+}
+
+body.single-camps #comments span.ac-support-count {
+	color: #e8596f;
+	font-weight: bold;
+	display: inline-block;
+	margin-left: 0.5em;
 }
 
 /* Media queries */

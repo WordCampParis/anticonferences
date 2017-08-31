@@ -353,3 +353,10 @@ function anticonferences_enqueue_assets() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'anticonferences_enqueue_assets', 20 );
+
+function anticonferences_topic_get_support_count( WP_Comment $comment ) {
+	$array_count = wp_list_pluck( $comment->get_children(), 'comment_content' );
+	$array_count = array_map( 'absint', $array_count );
+
+	return array_sum( $array_count );
+}

@@ -28,6 +28,10 @@
 			?>
 		</ol>
 
+		<div id="support-container">
+			<?php anticonferences_support_form(); ?>
+		</div>
+
 	<?php elseif ( anticonferences_topics_closed() ) : ?>
 
 		<p class="no-comments"><?php _e( 'La période de proposition des sujets est terminée.', 'anticonferences' ); ?></p>
