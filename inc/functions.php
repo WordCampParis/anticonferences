@@ -232,13 +232,58 @@ function anticonferences_preprocess_comment( $comment_data = array() ) {
 }
 add_filter( 'preprocess_comment', 'anticonferences_preprocess_comment', 10, 1 );
 
+function anticonferences_urlsafe_b64encode( $string ) {
+    $data = base64_encode( $string );
+    $data = str_replace( array( '+','/','=' ), array( '-','_','' ), $data );
+    return $data;
+}
+
+function anticonferences_urlsafe_b64decode( $string ) {
+    $data = str_replace( array( '-','_' ),array( '+','/' ),$string );
+    $mod4 = strlen( $data ) % 4;
+    if ( $mod4 ) {
+        $data .= substr( '====', $mod4 );
+    }
+
+    return base64_decode( $data );
+}
+
+function anticonferences_support_awaiting_validation( $email = '' ) {
+	global $wpdb;
+
+	/**
+	 * @todo cache
+	 */
+
+	return $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->commentmeta} WHERE meta_key='_ac_support_email' AND meta_value = %s", $email ) );
+}
+
+function anticonferences_support_allowed( $email = '' ) {
+	global $wpdb;
+
+	/**
+	 * @todo cache
+	 */
+
+	return $wpdb->get_var( $wpdb->prepare( "SELECT comment_approved FROM {$wpdb->comments} WHERE comment_type = 'ac_support' AND comment_author_email = %s LIMIT 1", $email ) );
+}
+
 function anticonferences_pre_comment_approved( $approved = 0, $comment_data = array() ) {
-	if ( ! $approved ) {
+	if ( ! isset( $comment_data['comment_type'] ) ) {
 		return $approved;
 	}
 
-	if ( isset( $comment_data['comment_type'] ) && 'ac_topic' === $comment_data['comment_type'] ) {
+	// New topics require a moderation step.
+	if ( 'ac_topic' === $comment_data['comment_type'] ) {
 		$approved = 0;
+
+	// New supports may require a validate step.
+	} elseif ( 'ac_support' === $comment_data['comment_type'] ) {
+		if ( 0 !== (int) anticonferences_support_awaiting_validation( anticonferences_urlsafe_b64encode( $comment_data['comment_author_email'] ) ) ) {
+			$approved = 0;
+		} else {
+			$approved = (int) anticonferences_support_allowed( $comment_data['comment_author_email'] );
+		}
 	}
 
 	return $approved;
@@ -305,8 +350,9 @@ function anticonferences_count_all_comments( $stats = array(), $post_id = 0 ) {
 add_filter( 'wp_count_comments', 'anticonferences_count_all_comments', 10, 2 );
 
 function anticonferences_parse_comment_query( WP_Comment_Query $comment_query ) {
-	if ( ! $comment_query->query_vars['post_ID'] && ! $comment_query->query_vars['post_id'] ) {
-		$not_in = array( 'ac_topic', 'ac_support' );
+	$not_in = array( 'ac_topic', 'ac_support' );
+
+	if ( ! $comment_query->query_vars['post_ID'] && ! $comment_query->query_vars['post_id'] && ! in_array( $comment_query->query_vars['type'], $not_in, true ) ) {
 
 		if ( ! $comment_query->query_vars['type__not_in'] || ! is_array( $comment_query->query_vars['type__not_in'] ) ) {
 			$comment_query->query_vars['type__not_in'] = explode( ',', $comment_query->query_vars['type__not_in'] );
@@ -317,28 +363,105 @@ function anticonferences_parse_comment_query( WP_Comment_Query $comment_query ) 
 }
 add_action( 'parse_comment_query', 'anticonferences_parse_comment_query' );
 
+function anticonferences_notify_support_author( WP_Comment $support ) {
+	$blogname        = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
+
+	$notify_message  = __( 'Merci de cliquer sur le lien suivant pour valider votre soutien :', 'anticonferences' ) . "\r\n";
+	$notify_message .= add_query_arg( 'key-support', anticonferences_urlsafe_b64encode( $support->comment_author_email ), get_post_permalink( $support->comment_post_ID ) ) . "\r\n";
+
+	$camp_title = get_post_field( 'post_title', $support->comment_post_ID );
+	$subject    = sprintf( __('[%s] Validation Soutien', 'anticonferences' ), $camp_title );
+
+	@wp_mail( $support->comment_author_email, wp_specialchars_decode( $subject ), $notify_message );
+}
+
 function anticonferences_notify_moderator( $maybe_notify = true, $comment_ID = 0 ) {
 	$topic = get_comment( $comment_ID );
 
-	if ( ! isset( $topic->comment_type ) || 'ac_topic' !== $topic->comment_type ) {
+	if ( ! isset( $topic->comment_type ) ) {
 		return $maybe_notify;
 	}
 
-	$slack_webhook = get_post_meta( $topic->comment_post_ID, '_camp_slack_webhook', true );
+	if ( 'ac_topic' === $topic->comment_type ) {
+		$slack_webhook = get_post_meta( $topic->comment_post_ID, '_camp_slack_webhook', true );
 
-	if ( ! $slack_webhook ) {
-		return $maybe_notify;
+		if ( ! $slack_webhook ) {
+			return $maybe_notify;
+		}
+
+		$payload = new AC_Slack_Payload( $topic );
+
+		wp_remote_post( $slack_webhook, array(
+			'body' => $payload->get_json(),
+		) );
+
+		$maybe_notify = false;
+
+	// The first Support needs to be validated by an email check.
+	} elseif ( 'ac_support' === $topic->comment_type ) {
+		$support = clone $topic;
+
+		$base_64_email = anticonferences_urlsafe_b64encode( $support->comment_author_email );
+
+		if ( ! anticonferences_support_awaiting_validation( $base_64_email ) ) {
+			update_comment_meta( $comment_ID, '_ac_support_email', $base_64_email );
+			anticonferences_notify_support_author( $support );
+		}
+
+		$maybe_notify = false;
 	}
 
-	$payload = new AC_Slack_Payload( $topic );
-
-	wp_remote_post( $slack_webhook, array(
-		'body' => $payload->get_json(),
-	) );
-
-	return false;
+	return $maybe_notify;
 }
 add_filter( 'notify_moderator', 'anticonferences_notify_moderator', 10, 2 );
+
+function anticonferences_notify_post_author( $maybe_notify = true, $comment_ID = 0 ) {
+	$ac = get_comment( $comment_ID );
+
+	if ( ! isset( $ac->comment_type ) ) {
+		return $maybe_notify;
+	}
+
+	if ( 'ac_topic' === $ac->comment_type || 'ac_support' === $ac->comment_type ) {
+		$maybe_notify = false;
+	}
+
+	return $maybe_notify;
+}
+add_filter( 'notify_post_author', 'anticonferences_notify_post_author', 10, 2 );
+
+function anticonferences_template_redirect() {
+	if ( ! is_singular( 'camps' ) ){
+		return;
+	}
+
+	if ( ! isset( $_GET['key-support'] ) ) {
+		return;
+	}
+
+	if ( delete_metadata( 'comment', 0, '_ac_support_email' ,$_GET['key-support'], true ) ) {
+		$back_link = remove_query_arg( 'key-support' );
+		$email     = anticonferences_urlsafe_b64decode( $_GET['key-support'] );
+
+		$supports = get_comments( array(
+			'author_email'       => $email,
+			'type'               => 'ac_support',
+			'status'             => 'hold',
+		) );
+
+		foreach ( $supports as $support ) {
+			wp_set_comment_status( $support->comment_ID, 'approve' );
+		}
+
+		wp_die( sprintf(
+			__( 'Merci d\'avoir validé votre email. Vos soutiens ont été activés et les prochains le seront automatiquement. %s', 'anticonferences' ),
+			'<a href="' . esc_url( $back_link ). '">' . esc_html__( 'Afficher les sujets', 'anticonferences' ) . '</a>.'
+		) );
+	} else {
+		wp_die( __( 'Une erreur est survenue au cours de la validation de votre email. Il semble qu\'elle ait déjà eut lieu.', 'anticonferences' ) );
+	}
+}
+add_action( 'template_redirect', 'anticonferences_template_redirect', 8 );
 
 function anticonferences_enqueue_assets() {
 	if ( ! is_singular( 'camps' ) ){
