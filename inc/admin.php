@@ -317,13 +317,11 @@ function anticonferences_admin_support_text( $comment_text = '', WP_Comment $com
 	$current_screen = get_current_screen();
 
 	if ( wp_doing_ajax() ) {
-		$headers = getallheaders();
-
-		if ( ! isset( $headers['Referer'] ) ) {
+		if ( ! isset( $_SERVER['HTTP_REFERER'] ) ) {
 			return $comment_text;
 		}
 
-		$referer = parse_url( $headers['Referer'] );
+		$referer = parse_url( $_SERVER['HTTP_REFERER'] );
 
 		if ( false === strpos( $referer['path'], 'wp-admin/post.php' ) ) {
 			return $comment_text;

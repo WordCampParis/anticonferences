@@ -110,7 +110,8 @@ body.single-camps #support-container.active {
 }
 
 /* Topics list */
-.topic-awaiting-moderation {
+.topic-awaiting-moderation,
+.support-awaiting-moderation {
 	border-left-width: 4px;
 	border-left-color: #d98500;
 	border-left-style: solid;
@@ -118,6 +119,10 @@ body.single-camps #support-container.active {
 	font-size: 90%;
 	font-style: italic;
 	padding-left: 0.5em;
+}
+
+.support-awaiting-moderation {
+	margin-top: 0.5em;
 }
 
 body.single-camps #comments span.ac-loved,

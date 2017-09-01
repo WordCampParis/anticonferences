@@ -79,30 +79,40 @@ function anticonferences_topic_support( $link = '', $args = array(), WP_Comment 
 		return;
 	}
 
-	$emails    = wp_list_pluck( $comment->get_children(), 'comment_author_email' );
+	$emails    = wp_list_pluck( $comment->get_children(), 'comment_approved', 'comment_author_email' );
 	$commenter = wp_get_current_commenter();
 	$class     = 'ac-love';
 	$disabled  = '';
+	$feedback  = '';
 
 	if ( is_user_logged_in() ) {
 		$commenter['comment_author_email'] = wp_get_current_user()->user_email;
 	}
 
-	if ( isset( $commenter['comment_author_email'] ) && in_array( $commenter['comment_author_email'], $emails, true ) ) {
+	if ( isset( $commenter['comment_author_email'] ) && isset( $emails[ $commenter['comment_author_email'] ] ) ) {
 		$class    = 'ac-loved';
 		$disabled = ' disabled="disabled"';
+
+		if ( 0 === (int) $emails[ $commenter['comment_author_email'] ] ) {
+			$feedback = sprintf(
+				'<p class="support-awaiting-moderation">%s</p>',
+				__( 'Votre soutien à ce sujet est en attente de validation. Un email vous a été envoyé pour procéder à celle-ci.', 'anticonferences' )
+			);
+		}
 	}
 
 	return sprintf( '<button type="button" class="ac-support-button" data-topic-id="%1$s"%2$s>
 			<span class="screen-reader-text">%3$s</span>
 			<span class="%4$s"></span>
 		</button>
-		<span class="ac-support-count">%5$s</span>',
+		<span class="ac-support-count">%5$s</span>
+		%6$s',
 		(int) $comment->comment_ID,
 		$disabled,
 		esc_html__( 'Supporter ce sujet', 'anticonferences' ),
 		$class,
-		anticonferences_topic_get_support_count( $comment )
+		anticonferences_topic_get_support_count( $comment ),
+		$feedback
 	);
 }
 

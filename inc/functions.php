@@ -261,6 +261,11 @@ function anticonferences_support_awaiting_validation( $email = '' ) {
 function anticonferences_support_allowed( $email = '' ) {
 	global $wpdb;
 
+	// Logged in user email doesn't need to be checked.
+	if ( is_user_logged_in() ) {
+		return 1;
+	}
+
 	/**
 	 * @todo cache
 	 */
@@ -463,6 +468,23 @@ function anticonferences_template_redirect() {
 }
 add_action( 'template_redirect', 'anticonferences_template_redirect', 8 );
 
+function anticonferences_topic_redirect( $redirect = '', WP_Comment $support ) {
+	if ( 'ac_support' === $support->comment_type ) {
+		$redirect = get_comment_link( $support->comment_parent );
+	}
+
+	return $redirect;
+}
+add_filter( 'comment_post_redirect', 'anticonferences_topic_redirect', 10, 2 );
+
+function anticonferences_update_support_count( $comment_ID, WP_Comment $support ) {
+	$count  = (int) get_comment_meta( $support->comment_parent, '_ac_support_count', true );
+	$count += (int) $support->comment_content;
+
+	update_comment_meta( $support->comment_parent, '_ac_support_count', $count );
+}
+add_action( 'comment_approved_ac_support', 'anticonferences_update_support_count', 10, 2 );
+
 function anticonferences_enqueue_assets() {
 	if ( ! is_singular( 'camps' ) ){
 		return;
@@ -478,7 +500,8 @@ function anticonferences_enqueue_assets() {
 add_action( 'wp_enqueue_scripts', 'anticonferences_enqueue_assets', 20 );
 
 function anticonferences_topic_get_support_count( WP_Comment $comment ) {
-	$array_count = wp_list_pluck( $comment->get_children(), 'comment_content' );
+	// Only count the approved supports
+	$array_count = wp_filter_object_list( $comment->get_children(), array( 'comment_approved' => 1 ), 'and','comment_content' );
 	$array_count = array_map( 'absint', $array_count );
 
 	return array_sum( $array_count );
