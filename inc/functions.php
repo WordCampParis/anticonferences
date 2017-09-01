@@ -404,13 +404,15 @@ function anticonferences_notify_moderator( $maybe_notify = true, $comment_ID = 0
 
 	// The first Support needs to be validated by an email check.
 	} elseif ( 'ac_support' === $topic->comment_type ) {
-		$support = clone $topic;
+		if ( ! is_user_logged_in() ) {
+			$support = clone $topic;
 
-		$base_64_email = anticonferences_urlsafe_b64encode( $support->comment_author_email );
+			$base_64_email = anticonferences_urlsafe_b64encode( $support->comment_author_email );
 
-		if ( ! anticonferences_support_awaiting_validation( $base_64_email ) ) {
-			update_comment_meta( $comment_ID, '_ac_support_email', $base_64_email );
-			anticonferences_notify_support_author( $support );
+			if ( ! anticonferences_support_awaiting_validation( $base_64_email ) ) {
+				update_comment_meta( $comment_ID, '_ac_support_email', $base_64_email );
+				anticonferences_notify_support_author( $support );
+			}
 		}
 
 		$maybe_notify = false;
