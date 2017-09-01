@@ -312,3 +312,31 @@ function anticonferences_notify_topic_author( WP_Comment $topic ) {
 	@wp_mail( $topic->comment_author_email, wp_specialchars_decode( $subject ), $notify_message );
 }
 add_action( 'comment_unapproved_to_approved', 'anticonferences_notify_topic_author', 10, 1 );
+
+function anticonferences_admin_support_text( $comment_text = '', WP_Comment $comment ) {
+	$current_screen = get_current_screen();
+
+	if ( wp_doing_ajax() ) {
+		$headers = getallheaders();
+
+		if ( ! isset( $headers['Referer'] ) ) {
+			return $comment_text;
+		}
+
+		$referer = parse_url( $headers['Referer'] );
+
+		if ( false === strpos( $referer['path'], 'wp-admin/post.php' ) ) {
+			return $comment_text;
+		}
+
+	} elseif ( ! $current_screen || empty( $current_screen->post_type ) || 'camps' !== $current_screen->post_type ) {
+		return $comment_text;
+	}
+
+	if ( 'ac_support' === $comment->comment_type ) {
+		$comment_text = '<strong><span class="dashicons dashicons-heart"></span> ' . $comment_text . '</strong>';
+	}
+
+	return $comment_text;
+}
+add_filter( 'comment_text', 'anticonferences_admin_support_text', 10, 2 );
