@@ -42,7 +42,6 @@ function anticonferences_admin_register_metabox( $camp = null ) {
 		}
 	}
 
-
 	if ( current_theme_supports( 'post-formats' ) ) {
 		remove_meta_box( 'formatdiv', get_current_screen(), 'side' );
 
@@ -228,6 +227,7 @@ function anticonferences_admin_load_edit_comments() {
 			'searchTopics'   => esc_html__( 'Rechercher un sujet', 'anticonferences' ),
 			'topicColumn'    => esc_html__( 'Sujet', 'anticonferences' ),
 			'titletag'       => esc_html__( 'Modération des sujets', 'anticonferences' ),
+			'noTopics'       => esc_html__( 'Aucun sujet pour le moment.', 'anticonferences' ),
 		);
 	}
 
@@ -268,9 +268,12 @@ function anticonferences_admin_enqueue_scripts() {
 		return;
 	}
 
-	wp_enqueue_style( 'ac-admin-style', anticonferences_get_asset( 'admin' ), array(), anticonferences()->version );
+	// Get Plugin Main instance
+	$ac = anticonferences();
 
-	if ( isset( anticonferences()->admin_inline_script ) ) {
+	wp_enqueue_style( 'ac-admin-style', anticonferences_get_asset( 'admin' ), array(), $ac->version );
+
+	if ( isset( $ac->admin_inline_script ) ) {
 		wp_add_inline_script( 'common', sprintf( '
 			( function( $ ) {
 				$( document ).ready( function() {
@@ -282,12 +285,14 @@ function anticonferences_admin_enqueue_scripts() {
 						$( \'.edit-comments-php h1.wp-heading-inline\' ).html( text.moderateTopics.replace( \'{l}\', link ) );
 						$( \'#comments-form #search-submit\' ).val( text.searchTopics );
 						$( \'#comments-form .wp-list-table th.column-comment\').html( text.topicColumn );
+						$( \'#the-comment-list tr.no-items td\' ).first().html( text.noTopics );
+
 					} else if ( $( \'.comment-php .wrap h1\' ).length ) {
 						$( \'.comment-php .wrap h1\' ).html( text.editTopic );
 					}
 				} );
 			} )( jQuery );
-		', json_encode( anticonferences()->admin_inline_script ) ) );
+		', json_encode( $ac->admin_inline_script ) ) );
 	}
 }
 add_action( 'admin_enqueue_scripts', 'anticonferences_admin_enqueue_scripts' );
