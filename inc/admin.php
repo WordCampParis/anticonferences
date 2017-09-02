@@ -35,7 +35,7 @@ function anticonferences_admin_register_metabox( $camp = null ) {
 			$metaboxes['commentsdiv'] = (object) array(
 				'id'    => 'commentsdiv',
 				'title' => __( 'Sujets proposés', 'anticonferences' ),
-				'cb'    => 'post_comment_meta_box',
+				'cb'    => 'anticonferences_admin_camp_topics',
 				'ctxt'  => 'aniticonferences',
 				'prio'  => 'high',
 			);
@@ -57,6 +57,39 @@ function anticonferences_admin_register_metabox( $camp = null ) {
 	foreach ( $metaboxes as $metabox ) {
 		add_meta_box( $metabox->id, $metabox->title, $metabox->cb, $pt, $metabox->ctxt, $metabox->prio );
 	}
+}
+
+function anticonferences_admin_camp_topic_query( WP_Comment_Query $topic_query ) {
+	$topic_query->query_vars['type'] = 'ac_topic';
+
+	remove_action( 'parse_comment_query', 'anticonferences_admin_camp_topic_query', 15, 1 );
+}
+
+function anticonferences_admin_ajax_set_camp_topics() {
+	if ( ! wp_doing_ajax() || ! isset( $_SERVER['HTTP_REFERER'] ) ) {
+		return;
+	}
+
+	$referer = parse_url( $_SERVER['HTTP_REFERER'] );
+
+	if ( false === strpos( $referer['path'], 'wp-admin/post.php' ) || ! isset( $referer['query'] ) ) {
+		return;
+	}
+
+	$qv = wp_parse_args( $referer['query'] );
+
+	if ( ! isset( $qv['post'] ) || 'camps' !== get_post_type( $qv['post'] ) ) {
+		return;
+	}
+
+	add_action( 'parse_comment_query', 'anticonferences_admin_camp_topic_query', 15, 1 );
+}
+add_action( 'wp_ajax_get-comments', 'anticonferences_admin_ajax_set_camp_topics', 0 );
+
+function anticonferences_admin_camp_topics( $camp = null ) {
+	add_action( 'parse_comment_query', 'anticonferences_admin_camp_topic_query', 15, 1 );
+
+	post_comment_meta_box( $camp );
 }
 
 function anticonferences_admin_details_metabox( $camp = null ) {
@@ -221,6 +254,8 @@ function anticonferences_admin_load_edit_comments() {
 		if ( empty( $post_type ) || 'camps' !== $post_type ) {
 			return;
 		}
+
+		add_action( 'parse_comment_query', 'anticonferences_admin_camp_topic_query', 15, 1 );
 
 		anticonferences()->admin_inline_script = array(
 			'moderateTopics' => esc_html__( 'Sujets proposés pour {l}', 'anticonferences' ),
