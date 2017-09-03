@@ -62,7 +62,9 @@ function anticonferences_admin_register_metabox( $camp = null ) {
 function anticonferences_admin_camp_topic_query( WP_Comment_Query $topic_query ) {
 	$topic_query->query_vars['type'] = 'ac_topic';
 
-	remove_action( 'parse_comment_query', 'anticonferences_admin_camp_topic_query', 15, 1 );
+	if ( wp_doing_ajax() ) {
+		remove_action( 'parse_comment_query', 'anticonferences_admin_camp_topic_query', 15, 1 );
+	}
 }
 
 function anticonferences_admin_ajax_set_camp_topics() {
@@ -90,6 +92,8 @@ function anticonferences_admin_camp_topics( $camp = null ) {
 	add_action( 'parse_comment_query', 'anticonferences_admin_camp_topic_query', 15, 1 );
 
 	post_comment_meta_box( $camp );
+
+	remove_action( 'parse_comment_query', 'anticonferences_admin_camp_topic_query', 15, 1 );
 }
 
 function anticonferences_admin_details_metabox( $camp = null ) {
@@ -260,7 +264,6 @@ function anticonferences_admin_load_edit_comments() {
 		anticonferences()->admin_inline_script = array(
 			'moderateTopics' => esc_html__( 'Sujets proposés pour {l}', 'anticonferences' ),
 			'searchTopics'   => esc_html__( 'Rechercher un sujet', 'anticonferences' ),
-			'topicColumn'    => esc_html__( 'Sujet', 'anticonferences' ),
 			'titletag'       => esc_html__( 'Modération des sujets', 'anticonferences' ),
 			'noTopics'       => esc_html__( 'Aucun sujet pour le moment.', 'anticonferences' ),
 		);
@@ -319,8 +322,9 @@ function anticonferences_admin_enqueue_scripts() {
 
 						$( \'.edit-comments-php h1.wp-heading-inline\' ).html( text.moderateTopics.replace( \'{l}\', link ) );
 						$( \'#comments-form #search-submit\' ).val( text.searchTopics );
-						$( \'#comments-form .wp-list-table th.column-comment\').html( text.topicColumn );
 						$( \'#the-comment-list tr.no-items td\' ).first().html( text.noTopics );
+
+						$( \'#supports-hide\' ).after( $( \'<span></span>\' ).addClass( \'dashicons dashicons-heart ac-support-count\' ) );
 
 					} else if ( $( \'.comment-php .wrap h1\' ).length ) {
 						$( \'.comment-php .wrap h1\' ).html( text.editTopic );
@@ -353,28 +357,44 @@ function anticonferences_notify_topic_author( WP_Comment $topic ) {
 }
 add_action( 'comment_unapproved_to_approved', 'anticonferences_notify_topic_author', 10, 1 );
 
-function anticonferences_admin_support_text( $comment_text = '', WP_Comment $comment ) {
-	$current_screen = get_current_screen();
-
-	if ( wp_doing_ajax() ) {
-		if ( ! isset( $_SERVER['HTTP_REFERER'] ) ) {
-			return $comment_text;
-		}
-
-		$referer = parse_url( $_SERVER['HTTP_REFERER'] );
-
-		if ( false === strpos( $referer['path'], 'wp-admin/post.php' ) ) {
-			return $comment_text;
-		}
-
-	} elseif ( ! $current_screen || empty( $current_screen->post_type ) || 'camps' !== $current_screen->post_type ) {
-		return $comment_text;
+function anticonferences_admin_manage_topics_columns( $columns = array() ) {
+	if ( 'camps' !== get_current_screen()->post_type ) {
+		return $columns;
 	}
 
-	if ( 'ac_support' === $comment->comment_type ) {
-		$comment_text = '<strong><span class="dashicons dashicons-heart"></span> ' . $comment_text . '</strong>';
+	$new_column = array( 'supports' => '<span class="dashicons dashicons-heart"></span>' );
+
+	if ( isset( $columns['date'] ) ) {
+		$new_column = array_merge( $new_column, array_slice( $columns, -1, 1, true ) );
+		array_pop( $columns );
 	}
 
-	return $comment_text;
+	if ( isset( $columns['comment'] ) ) {
+		$columns['comment'] = __( 'Sujet proposé', 'anticonferences' );
+	}
+
+	// Make sure the comments query is not overriden anymore.
+	if ( has_action( 'parse_comment_query', 'anticonferences_admin_camp_topic_query', 15, 1 ) ) {
+		remove_action( 'parse_comment_query', 'anticonferences_admin_camp_topic_query', 15, 1 );
+	}
+
+	return array_merge( $columns, $new_column );
 }
-add_filter( 'comment_text', 'anticonferences_admin_support_text', 10, 2 );
+add_filter( 'manage_edit-comments_columns', 'anticonferences_admin_manage_topics_columns', 10, 1 );
+
+function anticonferences_admin_topic_supports_column( $column = '', $comment_ID = 0 ) {
+	if ( 'supports' !== $column ) {
+		return;
+	}
+
+	$supports_count = get_comment_meta( $comment_ID, '_ac_support_count', true );
+
+	if ( ! $supports_count ) {
+		$supports_count = '&#8212;';
+	} else {
+		$supports_count = sprintf( '<span class="ac-support-count">%d</span>', $supports_count );
+	}
+
+	echo wp_kses( $supports_count, array( 'span' => array( 'class' => true ) ) );
+}
+add_action( 'manage_comments_custom_column', 'anticonferences_admin_topic_supports_column', 10, 2 );

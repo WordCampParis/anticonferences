@@ -339,14 +339,32 @@ function anticonferences_all_comments_count_query( $query = '' ) {
 
 	if ( $comments_count_query === join( '', $sql ) ) {
 		$query = str_replace( $sql['groupby'], sprintf( 'WHERE comment_type NOT IN( "ac_topic", "ac_support" ) %s', $sql['groupby'] ), $query );
+
+	// On the edit-comment screen, make sure support are not counted.
+	} elseif ( isset( $_GET['comment_status'] ) && ! empty( $_GET['p'] ) ) {
+		$sql_p = array_merge( array_slice( $sql, 0, 2, true ), array(
+			'where' => $wpdb->prepare( 'WHERE comment_post_ID = %d', $_GET['p'] ),
+		), array_slice( $sql, 2, 1, true ) );
+
+		if ( $comments_count_query === join( '', $sql_p ) ) {
+			$query = str_replace( $sql['groupby'], sprintf( 'AND comment_type != "ac_support" %s', $sql['groupby'] ), $query );
+		}
 	}
 
 	return $query;
 }
 
 function anticonferences_count_all_comments( $stats = array(), $post_id = 0 ) {
+	$screen = get_current_screen();
+
+	$add_filter = ! $post_id;
+
+	if ( isset( $screen->id ) && 'edit-comments' === $screen->id && 'camps' === $screen->post_type ) {
+		$add_filter = true;
+	}
+
 	// Filter the query to remove AntiConférences comment types.
-	if ( ! $post_id ) {
+	if ( $add_filter ) {
 		add_filter( 'query', 'anticonferences_all_comments_count_query', 10, 1 );
 	}
 

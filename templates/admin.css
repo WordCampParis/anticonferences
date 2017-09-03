@@ -5,3 +5,18 @@ body.post-type-camps #aniticonferences-sortables #show-comments a:first-child,
 body.post-type-camps #comments-form .tablenav.top .actions:not( .bulkactions ) {
 	display: none;
 }
+
+body.post-type-camps .fixed th.column-supports {
+	width: 10%;
+}
+
+body.post-type-camps #the-comment-list span.ac-support-count,
+body.post-type-camps .fixed th.column-supports,
+body.post-type-camps #adv-settings span.ac-support-count {
+	color: #e8596f;
+	font-weight: bold;
+}
+
+body.post-type-camps #adv-settings span.ac-support-count {
+	vertical-align: text-bottom;
+}
