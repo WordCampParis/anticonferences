@@ -325,6 +325,7 @@ add_filter( 'comments_open', 'anticonferences_comments_open', 10, 2 );
 
 function anticonferences_all_comments_count_query( $query = '' ) {
 	global $wpdb;
+	$ac = anticonferences();
 
 	// Remove the temporary filter immediately.
 	remove_filter( 'query', 'anticonferences_all_comments_count_query' );
@@ -340,10 +341,17 @@ function anticonferences_all_comments_count_query( $query = '' ) {
 	if ( $comments_count_query === join( '', $sql ) ) {
 		$query = str_replace( $sql['groupby'], sprintf( 'WHERE comment_type NOT IN( "ac_topic", "ac_support" ) %s', $sql['groupby'] ), $query );
 
-	// On the edit-comment screen, make sure support are not counted.
-	} elseif ( isset( $_GET['comment_status'] ) && ! empty( $_GET['p'] ) ) {
+	// On the edit-comment or edit camps screen, make sure support are not counted.
+	} elseif ( ( isset( $_GET['comment_status'] ) && ! empty( $_GET['p'] ) ) || ! empty( $ac->camp_topics ) ) {
+		$id = 0;
+		if ( ! empty( $_GET['p'] ) ) {
+			$id = $_GET['p'];
+		} elseif ( ! empty( $ac->camp_topics ) ) {
+			$id = $ac->camp_topics;
+		}
+
 		$sql_p = array_merge( array_slice( $sql, 0, 2, true ), array(
-			'where' => $wpdb->prepare( 'WHERE comment_post_ID = %d', $_GET['p'] ),
+			'where' => $wpdb->prepare( 'WHERE comment_post_ID = %d', $id ),
 		), array_slice( $sql, 2, 1, true ) );
 
 		if ( $comments_count_query === join( '', $sql_p ) ) {
@@ -362,7 +370,7 @@ function anticonferences_count_all_comments( $stats = array(), $post_id = 0 ) {
 
 	$add_filter = ! $post_id;
 
-	if ( isset( $screen->id ) && 'edit-comments' === $screen->id && 'camps' === $screen->post_type ) {
+	if ( ( isset( $screen->id ) && 'edit-comments' === $screen->id && 'camps' === $screen->post_type) || ! empty( anticonferences()->camp_topics ) ) {
 		$add_filter = true;
 	}
 

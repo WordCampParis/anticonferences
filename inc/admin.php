@@ -218,6 +218,47 @@ function anticonferences_admin_box_area( $camp = null ) {
 }
 add_action( 'edit_form_after_title', 'anticonferences_admin_box_area', 10, 1 );
 
+function anticonferences_admin_camps_columns( $columns = array() ) {
+	$new_column = array(
+		'topics' => sprintf(
+			'<span class="vers comment-grey-bubble" title="%1$s"><span class="screen-reader-text">%2$s</span></span>',
+			esc_attr__( 'Sujets', 'anticonferences' ),
+			esc_html__( 'Sujets proposés', 'anticonferences' )
+		),
+	);
+
+	$flip_cols  = array_values( array_flip( $columns ) );
+	$i_comments = array_search( 'comments', $flip_cols );
+
+	$columns = array_merge(
+		array_slice( $columns, 0, $i_comments, true ),
+		$new_column,
+		array_slice( $columns, -1, $i_comments, true )
+	);
+
+	return $columns;
+}
+add_filter( 'manage_camps_posts_columns', 'anticonferences_admin_camps_columns', 10, 1 );
+
+function anticonferences_admin_camps_custom_column( $column = '', $camp_id = 0 ) {
+	if ( 'topics' !== $column || ! $camp_id ) {
+		return;
+	}
+
+	global $wp_list_table, $post;
+	$ac = anticonferences();
+
+	$post            = get_post( (int) $camp_id );
+	$ac->camp_topics = $camp_id;
+	$topics_count    = wp_count_comments( $camp_id );
+	$ac->camp_topics = 0;
+
+	$post->comment_count = (int) $topics_count->approved;
+
+	$wp_list_table->comments_bubble( $camp_id, (int) $topics_count->moderated );
+}
+add_action( 'manage_camps_posts_custom_column', 'anticonferences_admin_camps_custom_column', 10, 2 );
+
 function anticonferences_admin_load_edit_comments() {
 	global $typenow;
 
@@ -324,8 +365,6 @@ function anticonferences_admin_enqueue_scripts() {
 						$( \'#comments-form #search-submit\' ).val( text.searchTopics );
 						$( \'#the-comment-list tr.no-items td\' ).first().html( text.noTopics );
 
-						$( \'#supports-hide\' ).after( $( \'<span></span>\' ).addClass( \'dashicons dashicons-heart ac-support-count\' ) );
-
 					} else if ( $( \'.comment-php .wrap h1\' ).length ) {
 						$( \'.comment-php .wrap h1\' ).html( text.editTopic );
 					}
@@ -362,7 +401,13 @@ function anticonferences_admin_manage_topics_columns( $columns = array() ) {
 		return $columns;
 	}
 
-	$new_column = array( 'supports' => '<span class="dashicons dashicons-heart"></span>' );
+	$new_column = array(
+		'supports' => sprintf(
+			'<span class="dashicons dashicons-heart" title="%1$s"></span><span class="screen-reader-text">%2$s</span>',
+			esc_attr__( 'Soutiens', 'anticonferences' ),
+			esc_html__( 'Soutiens apportés', 'anticonferences' )
+		),
+	);
 
 	if ( isset( $columns['date'] ) ) {
 		$new_column = array_merge( $new_column, array_slice( $columns, -1, 1, true ) );

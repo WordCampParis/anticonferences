@@ -10,13 +10,73 @@ body.post-type-camps .fixed th.column-supports {
 	width: 10%;
 }
 
-body.post-type-camps #the-comment-list span.ac-support-count,
-body.post-type-camps .fixed th.column-supports,
-body.post-type-camps #adv-settings span.ac-support-count {
-	color: #e8596f;
-	font-weight: bold;
+body.post-type-camps .fixed .column-topics {
+	width: 5.5em;
+	padding: 8px 0;
+	text-align: left;
 }
 
-body.post-type-camps #adv-settings span.ac-support-count {
-	vertical-align: text-bottom;
+body.post-type-camps .column-topics .post-com-count-wrapper {
+	white-space: nowrap;
+	word-wrap: normal;
+}
+
+body.post-type-camps .column-topics .post-com-count-no-comments,
+body.post-type-camps .column-topics .post-com-count-approved {
+    margin-top: 5px;
+}
+
+body.post-type-camps .column-topics .post-com-count {
+    display: inline-block;
+    vertical-align: top;
+}
+
+body.post-type-camps .column-topics .comment-count-approved {
+    box-sizing: border-box;
+    display: block;
+    padding: 0 8px;
+    min-width: 24px;
+    height: 2em;
+    border-radius: 5px;
+    background-color: #72777c;
+    color: #fff;
+    font-size: 11px;
+    line-height: 21px;
+    text-align: center;
+}
+
+body.post-type-camps .column-topics .post-com-count-no-comments:after,
+body.post-type-camps .column-topics .post-com-count-approved:after {
+    content: "";
+    display: block;
+    margin-left: 8px;
+    width: 0;
+    height: 0;
+    border-top: 5px solid #72777c;
+    border-right: 5px solid transparent;
+}
+
+body.post-type-camps .column-topics .post-com-count-no-pending {
+    display: none;
+}
+
+body.post-type-camps .column-topics .post-com-count-pending {
+    position: relative;
+    left: -3px;
+    padding: 0 5px;
+    min-width: 7px;
+    height: 17px;
+    border: 2px solid #fff;
+    border-radius: 11px;
+    background: #ca4a1f;
+    color: #fff;
+    font-size: 9px;
+    line-height: 17px;
+    text-align: center;
+}
+
+body.post-type-camps #the-comment-list span.ac-support-count,
+body.post-type-camps .fixed th.column-supports {
+	color: #e8596f;
+	font-weight: bold;
 }
