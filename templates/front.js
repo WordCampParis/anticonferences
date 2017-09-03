@@ -90,6 +90,10 @@
 
 		$( '#ac-support-amount' ).val( comment );
 
+		if ( ! $( '#ac-support-author' ).val() ) {
+			$( '#ac-support-author' ).val( $( '#support-email' ).val().split( '@' )[0] );
+		}
+
 		return event;
 	} );
 

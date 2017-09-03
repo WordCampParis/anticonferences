@@ -124,10 +124,10 @@ function anticonferences_support_form() {
 		$unlogged_inputs = sprintf( '<div class="comment-form-email">
 				<label for="support-email">%1$s <span class="required">*</span></label>
 				<input id="support-email" name="email" type="email" value="%2$s" size="30" maxlength="100"/>
-				<input type="hidden" name="author" value="%3$s"/>
+				<input type="hidden" name="author" id="ac-support-author" value="%3$s"/>
 			</div>',
 			esc_html__( 'Email', 'anticonferences' ),
-			esc_attr(  $commenter['comment_author_email'] ),
+			esc_attr( $commenter['comment_author_email'] ),
 			esc_attr( $commenter['comment_author'] )
 		);
 	}

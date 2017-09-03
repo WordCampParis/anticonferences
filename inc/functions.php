@@ -355,7 +355,10 @@ function anticonferences_all_comments_count_query( $query = '' ) {
 }
 
 function anticonferences_count_all_comments( $stats = array(), $post_id = 0 ) {
-	$screen = get_current_screen();
+	$screen = null;
+	if ( is_admin() ) {
+		$screen = get_current_screen();
+	}
 
 	$add_filter = ! $post_id;
 
@@ -422,7 +425,7 @@ function anticonferences_notify_moderator( $maybe_notify = true, $comment_ID = 0
 
 	// The first Support needs to be validated by an email check.
 	} elseif ( 'ac_support' === $topic->comment_type ) {
-		if ( ! is_user_logged_in() ) {
+		if ( ! (int) $topic->comment_approved ) {
 			$support = clone $topic;
 
 			$base_64_email = anticonferences_urlsafe_b64encode( $support->comment_author_email );
@@ -464,7 +467,7 @@ function anticonferences_template_redirect() {
 		return;
 	}
 
-	if ( delete_metadata( 'comment', 0, '_ac_support_email' ,$_GET['key-support'], true ) ) {
+	if ( delete_metadata( 'comment', null, '_ac_support_email' , $_GET['key-support'], true ) ) {
 		$back_link = remove_query_arg( 'key-support' );
 		$email     = anticonferences_urlsafe_b64decode( $_GET['key-support'] );
 
@@ -497,13 +500,31 @@ function anticonferences_topic_redirect( $redirect = '', WP_Comment $support ) {
 }
 add_filter( 'comment_post_redirect', 'anticonferences_topic_redirect', 10, 2 );
 
-function anticonferences_update_support_count( $comment_ID, WP_Comment $support ) {
+function anticonferences_increment_support_count( $comment_ID, WP_Comment $support ) {
+	if ( empty( $support->comment_approved ) ) {
+		return;
+	}
+
 	$count  = (int) get_comment_meta( $support->comment_parent, '_ac_support_count', true );
 	$count += (int) $support->comment_content;
 
 	update_comment_meta( $support->comment_parent, '_ac_support_count', $count );
 }
-add_action( 'comment_approved_ac_support', 'anticonferences_update_support_count', 10, 2 );
+add_action( 'comment_approved_ac_support', 'anticonferences_increment_support_count', 10, 2 );
+add_action( 'wp_insert_comment',           'anticonferences_increment_support_count', 10, 2 );
+
+function anticonferences_decrement_support_count( $comment_ID, WP_Comment $support ) {
+	$count  = (int) get_comment_meta( $support->comment_parent, '_ac_support_count', true );
+	$count -= (int) $support->comment_content;
+
+	if ( 0 > $count ) {
+		delete_comment_meta( $support->comment_parent, '_ac_support_count' );
+	} else {
+		update_comment_meta( $support->comment_parent, '_ac_support_count', $count );
+	}
+}
+add_action( 'comment_trash_ac_support', 'anticonferences_decrement_support_count', 10, 2 );
+add_action( 'comment_spam_ac_support',  'anticonferences_decrement_support_count', 10, 2 );
 
 function anticonferences_enqueue_assets() {
 	if ( ! is_singular( 'camps' ) ){
