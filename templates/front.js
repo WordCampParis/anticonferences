@@ -97,4 +97,11 @@
 		return event;
 	} );
 
+	$( '.comment-list' ).on( 'reset', '.support-form', function( event ) {
+		$( '#ac-support-amount' ).val( '' );
+		$( event.delegateTarget ).append( supportForm.removeClass( 'active' ) );
+
+		return event;
+	} );
+
 } )( jQuery );

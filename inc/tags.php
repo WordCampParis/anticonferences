@@ -140,12 +140,14 @@ function anticonferences_support_form() {
 				<input type="hidden" name="comment_post_ID" value="%3$s"/>
 				<input type="hidden" name="comment_parent" id="ac-topic-id"/>
 				<input name="submit" type="submit" class="submit" value="%4$s"/>
+				<input name="reset" type="reset" class="reset" value="%5$s"/>
 			</div>
 		</form>',
 		esc_url( site_url( '/wp-comments-post.php' ) ),
 		$unlogged_inputs,
 		(int) get_the_ID(),
-		esc_attr__(  'Soutenir', 'anticonferences' )
+		esc_attr__(  'Soutenir', 'anticonferences' ),
+		esc_attr__(  'Abandonner', 'anticonferences' )
 	);
 }
 

@@ -83,7 +83,8 @@ body.single-camps .camp-backdrop {
     z-index: 159900;
 }
 
-body.single-camps .camp-modal #commentform input[type=reset] {
+body.single-camps .camp-modal #commentform input[type=reset],
+body.single-camps .comment-list .support-form input[type=reset] {
 	background: #fff; /* Old browsers */
 	border: 1px solid #ccc;
 	color: #777;
@@ -97,6 +98,10 @@ body.single-camps .camp-modal #commentform input[type=reset] {
 	border-radius: 0;
 }
 
+body.single-camps .comment-list .support-form input[type=reset] {
+	padding: 0.8em 1em;
+}
+
 body.single-camps .camp-modal #commentform input[type=reset]:hover {
 	background: #ededed;
 	border: 1px solid #bbb;
@@ -107,6 +112,11 @@ body.single-camps .camp-modal #commentform input[type=reset]:hover {
 
 body.single-camps #support-container.active {
 	display: block;
+	margin-top: 1.5em;
+}
+
+body.single-camps #support-container.active form div {
+	margin-bottom: 1.8em;
 }
 
 /* Topics list */
