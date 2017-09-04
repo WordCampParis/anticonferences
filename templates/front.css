@@ -121,7 +121,8 @@ body.single-camps #support-container.active form div {
 
 /* Topics list */
 .topic-awaiting-moderation,
-.support-awaiting-moderation {
+.support-awaiting-moderation,
+.missing-option {
 	border-left-width: 4px;
 	border-left-color: #d98500;
 	border-left-style: solid;
@@ -129,6 +130,13 @@ body.single-camps #support-container.active form div {
 	font-size: 90%;
 	font-style: italic;
 	padding-left: 0.5em;
+}
+
+.missing-option {
+	margin-top: 0.5em;
+	border-left-color: #a00;
+	color: #555;
+	font-style: normal;
 }
 
 .support-awaiting-moderation {

@@ -542,6 +542,13 @@ function anticonferences_enqueue_assets() {
 	wp_enqueue_style( 'ac-front-style', anticonferences_get_asset(), array(), anticonferences()->version );
 	wp_enqueue_script( 'ac-front-script', anticonferences_get_asset( 'front', 'js' ), array( 'jquery' ), anticonferences()->version, true );
 
+	$post_id = get_queried_object_id();
+	if ( $post_id ) {
+		wp_localize_script( 'ac-front-script', 'AntiConferences', array(
+			'votes' => (int) get_post_meta( $post_id, '_camp_votes_amount', true ),
+		) );
+	}
+
 	if ( get_option( 'thread_comments' ) ) {
 		wp_dequeue_script( 'comment-reply' );
 	}

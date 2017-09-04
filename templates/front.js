@@ -35,11 +35,21 @@
 			return;
 		}
 
+		if ( 'undefined' === typeof AntiConferences.votes || 0 === parseInt( AntiConferences.votes, 10 ) ) {
+			$( event.currentTarget ).parent()
+			                        .append(
+			                        	$( '<p></p>' ).addClass( 'missing-option' )
+			                        	              .html( 'Please contact the administrator to make him define the amount of available votes.' )
+			                        );
+
+			return;
+		}
+
 		$( event.currentTarget ).parent().append( supportForm.addClass( 'active' ) );
 		$( supportForm ).find( '#ac-topic-id' ).val( parentID );
 
 		var hearts = ''
-		for ( var i=0; i < 10 ; i++ ) {
+		for ( var i=0; i < AntiConferences.votes ; i++ ) {
 			heart.attr( 'data-amount', i + 1 );
 			heart.find( '.ac-loved' ).removeClass( 'ac-loved' ).addClass( 'ac-love' );
             hearts += heart.get( 0 ).outerHTML;
@@ -98,6 +108,10 @@
 	} );
 
 	$( '.comment-list' ).on( 'reset', '.support-form', function( event ) {
+		$.each( $( event.currentTarget ).find( '.ac-heart.selected' ), function( i, heart ) {
+			$( heart ).removeClass( 'selected' );
+		} );
+
 		$( '#ac-support-amount' ).val( '' );
 		$( event.delegateTarget ).append( supportForm.removeClass( 'active' ) );
 
