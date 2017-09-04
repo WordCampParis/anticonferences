@@ -110,6 +110,10 @@ body.single-camps .camp-modal #commentform input[type=reset]:hover {
 	text-decoration: none;
 }
 
+body.single-camps .camp-modal .mce-btn button {
+	background: none;
+}
+
 body.single-camps #support-container.active {
 	display: block;
 	margin-top: 1.5em;

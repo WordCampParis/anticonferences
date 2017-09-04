@@ -220,6 +220,8 @@ function anticonferences_mce_buttons( $buttons = array() ) {
 		'alignleft',
 		'alignright',
 		'aligncenter',
+		'link',
+		'unlink',
 	) );
 }
 
