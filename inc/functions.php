@@ -275,6 +275,18 @@ function anticonferences_support_allowed( $email = '' ) {
 	return $wpdb->get_var( $wpdb->prepare( "SELECT comment_approved FROM {$wpdb->comments} WHERE comment_type = 'ac_support' AND comment_author_email = %s LIMIT 1", $email ) );
 }
 
+function anticonferences_support_can_flood_and_dupe( $retval ) {
+	if ( isset( $_POST['ac_comment_type'] ) && 'ac_support' === $_POST['ac_comment_type'] ) {
+		$retval = false;
+	} else {
+		var_dump( $_POST );
+	}
+
+	return $retval;
+}
+add_filter( 'duplicate_comment_id', 'anticonferences_support_can_flood_and_dupe', 11, 1 );
+add_filter( 'wp_is_comment_flood',  'anticonferences_support_can_flood_and_dupe', 11, 1 );
+
 function anticonferences_pre_comment_approved( $approved = 0, $comment_data = array() ) {
 	if ( ! isset( $comment_data['comment_type'] ) ) {
 		return $approved;
