@@ -278,8 +278,6 @@ function anticonferences_support_allowed( $email = '' ) {
 function anticonferences_support_can_flood_and_dupe( $retval ) {
 	if ( isset( $_POST['ac_comment_type'] ) && 'ac_support' === $_POST['ac_comment_type'] ) {
 		$retval = false;
-	} else {
-		var_dump( $_POST );
 	}
 
 	return $retval;
