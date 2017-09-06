@@ -40,6 +40,42 @@ function anticonferences_topic_get_editor() {
 	return $editor;
 }
 
+function anticonferences_order_form() {
+	$order_options = anticonferences_get_order_options();
+	$order_value   = get_query_var( 'orderby' );
+
+	if ( ! $order_value ) {
+		$order_value = 'date_asc';
+	}
+
+	$by             = 'ASC';
+	$options_output = '';
+	foreach ( $order_options as $o => $orderby ) {
+		$options_output .= '<option value="' . $o . '" ' . selected( $order_value, $o, false ) . '>' . esc_html( $orderby['label'] ) . '</option>';
+		$by              = $orderby['order'];
+	}
+
+	$by_input = sprintf( '<input type="hidden" name="order" value="%s"/>', esc_attr( $by ) );
+
+	$order_form_html = sprintf( '
+		<form action="%1$s" method="get" id="ac-order-form" class="nav-form">%2$s
+			<label for="orderby">
+				<span class="screen-reader-text">%3$s</span>
+			</label>
+			<select name="orderby" id="ac-order-box">
+				%4$s
+			</select>
+
+			<button type="submit" class="submit-sort">
+				<span class="ac-order-icon"></span>
+				<span class="screen-reader-text">%5$s</span>
+			</button>
+		</form>
+	', esc_url( get_post_permalink() ), $by_input, esc_attr__( 'Afficher en premier', 'anticonferences' ), $options_output, esc_attr__( 'Afficher en premier', 'anticonferences' ) );
+
+	echo $order_form_html;
+}
+
 function anticonferences_topics_toolbar() {
 	?>
 	<div id="topics-toolbar">
@@ -48,6 +84,10 @@ function anticonferences_topics_toolbar() {
 				<button class="button button-primary">
 					<span class="label"><?php esc_html_e( 'Nouveau sujet', 'anticonferences' ); ?></span>
 				</button>
+			</li>
+
+			<li id="ac-order-form" class="last">
+				<?php anticonferences_order_form() ;?>
 			</li>
 		</ul>
 	</div>

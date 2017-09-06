@@ -574,3 +574,22 @@ function anticonferences_topic_get_support_count( WP_Comment $comment ) {
 
 	return array_sum( $array_count );
 }
+
+function anticonferences_get_order_options() {
+	$order_options =  array(
+		'date_asc'       => array(
+			'label' => __( 'Les plus anciens', 'anticonferences' ),
+			'order' => 'ASC',
+		),
+		'date_desc'      => array(
+			'label' => __( 'Les plus récents', 'anticonferences' ),
+			'order' => 'DESC',
+		),
+		'support_count'  => array(
+			'label' => __( 'Les plus supportés', 'anticonferences' ),
+			'order' => 'DESC',
+		),
+	);
+
+	return apply_filters( 'anticonferences_get_order_options', $order_options );
+}
