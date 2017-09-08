@@ -51,11 +51,17 @@ function anticonferences_order_form() {
 	$by             = 'ASC';
 	$options_output = '';
 	foreach ( $order_options as $o => $orderby ) {
-		$options_output .= '<option value="' . $o . '" ' . selected( $order_value, $o, false ) . '>' . esc_html( $orderby['label'] ) . '</option>';
-		$by              = $orderby['order'];
+		$selected = selected( $order_value, $o, false );
+
+		$options_output .= '<option value="' . $o . '" ' . $selected . '>' . esc_html( $orderby['label'] ) . '</option>';
+
+		if ( $selected ) {
+			$by = $orderby['order'];
+		}
+
 	}
 
-	$by_input = sprintf( '<input type="hidden" name="order" value="%s"/>', esc_attr( $by ) );
+	$by_input = sprintf( '<input type="hidden" id="ac-order-order" name="order" value="%s"/>', esc_attr( $by ) );
 
 	$order_form_html = sprintf( '
 		<form action="%1$s" method="get" id="ac-order-form" class="nav-form">%2$s
@@ -119,7 +125,18 @@ function anticonferences_topic_support( $link = '', $args = array(), WP_Comment 
 		return;
 	}
 
-	$emails    = wp_list_pluck( $comment->get_children(), 'comment_approved', 'comment_author_email' );
+	$support_count = anticonferences_topic_get_support_count( $comment );
+	$children      = $comment->get_children( array( 'type' => 'ac_support' ) );
+
+	// Make sure to check children if there's a support count.
+	if ( ! $children && 0 !== $support_count ) {
+		$children = get_comments( array(
+			'parent' => $comment->comment_ID,
+			'type'   => 'ac_support',
+		) );
+	}
+
+	$emails    = wp_list_pluck( $children, 'comment_approved', 'comment_author_email' );
 	$commenter = wp_get_current_commenter();
 	$class     = 'ac-love';
 	$disabled  = '';
@@ -151,7 +168,7 @@ function anticonferences_topic_support( $link = '', $args = array(), WP_Comment 
 		$disabled,
 		esc_html__( 'Supporter ce sujet', 'anticonferences' ),
 		$class,
-		anticonferences_topic_get_support_count( $comment ),
+		$support_count,
 		$feedback
 	);
 }

@@ -376,7 +376,7 @@ function anticonferences_all_comments_count_query( $query = '' ) {
 
 function anticonferences_count_all_comments( $stats = array(), $post_id = 0 ) {
 	$screen = null;
-	if ( is_admin() ) {
+	if ( function_exists( 'get_current_screen' ) ) {
 		$screen = get_current_screen();
 	}
 
@@ -405,6 +405,25 @@ function anticonferences_parse_comment_query( WP_Comment_Query $comment_query ) 
 		}
 
 		$comment_query->query_vars['type__not_in'] = array_merge( (array) $comment_query->query_vars['type__not_in'], $not_in );
+	} elseif ( is_singular( 'camps' ) ) {
+		$orderby = get_query_var( 'orderby' );
+		$order   = get_query_var( 'order' );
+
+		if ( $order && $orderby && ! $comment_query->query_vars['parent'] ) {
+			$supported_orders = anticonferences_get_order_options();
+
+			if ( isset( $supported_orders[ $orderby ] ) ) {
+				if ( in_array( $orderby, array( 'date_asc', 'date_desc' ), true ) ) {
+					$comment_query->query_vars['orderby'] = 'comment_date_gmt';
+				} elseif ( isset( $supported_orders[ $orderby ]['meta_key'] ) ) {
+					$comment_query->query_vars['meta_key'] = $supported_orders[ $orderby ]['meta_key'];
+					$comment_query->query_vars['orderby'] = 'meta_value_num';
+				}
+
+				$comment_query->query_vars['order'] = $order;
+			}
+		}
+
 	}
 }
 add_action( 'parse_comment_query', 'anticonferences_parse_comment_query' );
@@ -569,8 +588,12 @@ add_action( 'wp_enqueue_scripts', 'anticonferences_enqueue_assets', 20 );
 
 function anticonferences_topic_get_support_count( WP_Comment $comment ) {
 	// Only count the approved supports
-	$array_count = wp_filter_object_list( $comment->get_children(), array( 'comment_approved' => 1 ), 'and','comment_content' );
+	$array_count = wp_filter_object_list( $comment->get_children( array( 'type' => 'ac_support' ) ), array( 'comment_approved' => 1 ), 'and','comment_content' );
 	$array_count = array_map( 'absint', $array_count );
+
+	if ( ! $array_count ) {
+		return (int) get_comment_meta( $comment->comment_ID, '_ac_support_count', true );
+	}
 
 	return array_sum( $array_count );
 }
@@ -586,8 +609,9 @@ function anticonferences_get_order_options() {
 			'order' => 'DESC',
 		),
 		'support_count'  => array(
-			'label' => __( 'Les plus supportés', 'anticonferences' ),
-			'order' => 'DESC',
+			'label'    => __( 'Les plus supportés', 'anticonferences' ),
+			'order'    => 'DESC',
+			'meta_key' => '_ac_support_count',
 		),
 	);
 

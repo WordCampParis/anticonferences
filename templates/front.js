@@ -118,4 +118,14 @@
 		return event;
 	} );
 
+	$( '#ac-order-box' ).on( 'change', function( event ) {
+		var orderby = $( event.currentTarget ).val(), order = 'DESC', orderparts = orderby.split( '_');
+
+		if ( orderparts.length && -1 !== $.inArray( orderparts[ orderparts.length - 1 ], ['asc', 'desc'] ) ) {
+			order = orderparts[ orderparts.length -1 ].toUpperCase();
+		}
+
+		$( '#ac-order-order' ).val( order );
+	} );
+
 } )( jQuery );
