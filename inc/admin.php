@@ -259,6 +259,96 @@ function anticonferences_admin_camps_custom_column( $column = '', $camp_id = 0 )
 }
 add_action( 'manage_camps_posts_custom_column', 'anticonferences_admin_camps_custom_column', 10, 2 );
 
+function anticonferences_register_topic_metabox( WP_Comment $topic ) {
+	if ( 'ac_topic' !== $topic->comment_type ) {
+		return;
+	}
+
+	add_meta_box(
+		'ac-topic-supports',
+		__( 'Soutiens', 'anticonferences' ),
+		'anticonferences_do_topic_metabox',
+		get_current_screen(),
+		'normal',
+		'low'
+	);
+}
+
+function anticonferences_do_topic_metabox( WP_Comment $topic ) {
+	$supports = wp_filter_object_list( $topic->get_children( array( 'type' => 'ac_support' ) ), array( 'comment_approved' => 1 ) );
+
+	if ( empty( $supports ) ) {
+		esc_html_e( 'Aucun soutien pour ce sujet pour le moment.', 'anticonferences' );
+	} else {
+		$users_support  = array_map( 'absint', wp_list_pluck( $supports, 'comment_content', 'comment_author_email' ) );
+		$users_count    = count( $users_support );
+		$supports_count = array_sum( $users_support );
+		$max_support    = (int) get_post_meta( $topic->comment_post_ID, '_camp_votes_amount', true );
+		?>
+		<p class="description">
+			<?php echo esc_html( sprintf( _n(
+				'%1$s utilisateur soutient ce sujet. %2$s support(s) au total.',
+				'%1$s utilisateurs soutiennent ce sujet. %2$s support(s) au total.',
+				$users_count,
+				'anticonferences'
+			), number_format_i18n( $users_count ), number_format_i18n( $supports_count ) ) ); ?>
+		</p>
+		<ul class="admin-topic-supports">
+			<?php for ( $i = 0; $i < $max_support; $i++  ) :
+				$heart = $i + 1;
+			?>
+			<li>
+				<div class="admin-topic-supports-heart">
+					<?php printf( '<span class="dashicons dashicons-heart"></span><span class="screen-reader-text">%1$s</span> %2$s',
+						_n( 'Soutien apporté', 'Soutiens apportés', $heart, 'anticonferences' ),
+						$heart
+					); ?>
+				</div>
+				<div class="admin-topic-supports-users">
+					<?php
+
+					$s = wp_list_filter( $supports, array( 'comment_content' => $heart ) );
+					if ( empty( $s ) ) : ?>
+						&#8212;
+					<?php else : foreach ( $s as $support ) : ?>
+						<span class="user-supported">
+							<?php echo get_avatar( $support->comment_author_email, 40 ); ?>
+
+							<?php $remove_link = wp_nonce_url( add_query_arg( 'remove_support', $support->comment_ID, $_SERVER['REQUEST_URI'] ), 'topic_remove_support_' . $topic->comment_ID ); ?>
+
+							<a href="<?php echo esc_url( $remove_link ); ?>" class="del-support" title="<?php esc_attr_e( 'Supprimer le soutien', 'anticonferences' );?>">
+								<div class="dashicons dashicons-trash"></div>
+							</a>
+						</span>
+					<?php endforeach; endif; ?>
+				</div>
+			</li>
+			<?php endfor; ?>
+		</ul>
+		<?php
+	}
+}
+
+function anticonferences_admin_topic_support_feedback() {
+	$feedbacks = array(
+		'suppport_removed'      => __( 'Soutien supprimé avec succès', 'anticonferences' ),
+		'suppport_remove_error' => __( 'Une erreur est survenue lors de la suppression du soutien', 'anticonferences' ),
+	);
+
+	if ( isset( $_GET['message'] ) && isset( $feedbacks[ $_GET['message'] ] ) ) {
+		$class = 'updated notice notice-success is-dismissible';
+
+		if ( 'suppport_remove_error' === $_GET['message'] ) {
+			$class = 'error notice is-dismissible';
+		}
+
+		printf( '<div id="message" class="%1$s"><p>%2$s</p></div>',
+			$class,
+			esc_html( $feedbacks[ $_GET['message'] ] )
+		);
+	}
+}
+
 function anticonferences_admin_load_edit_comments() {
 	global $typenow;
 
@@ -280,11 +370,37 @@ function anticonferences_admin_load_edit_comments() {
 			return;
 		}
 
+		if ( ! empty( $_GET['remove_support'] ) ) {
+			$support_id = (int) $_GET['remove_support'];
+			$topic_id   = $comment->comment_ID;
+
+			// nonce check
+			check_admin_referer( 'topic_remove_support_' . $topic_id );
+			$support = get_comment( $support_id );
+
+			if ( false !== wp_delete_comment( $support_id ) ) {
+				$message = 'suppport_removed';
+			} else {
+				$message = 'suppport_remove_error';
+			}
+
+			$commentlink = remove_query_arg( array( 'remove_support', '_wpnonce' ) );
+			$redirect = add_query_arg( 'message', $message, $commentlink );
+			wp_safe_redirect( $redirect );
+			exit();
+		}
+
 		$post_type = 'camps';
 		anticonferences()->admin_inline_script = array(
 			'editTopic' => esc_html__( 'Modifier le sujet', 'anticonferences' ),
 			'titletag'  => esc_html__( 'Modification d\'un sujet', 'anticonferences' ),
 		);
+
+		add_action( 'add_meta_boxes_comment', 'anticonferences_register_topic_metabox', 10, 1 );
+
+		if ( isset( $_GET['message'] ) && in_array( $_GET['message'], array( 'suppport_removed', 'suppport_remove_error' ), true ) ) {
+			add_action( 'admin_notices', 'anticonferences_admin_topic_support_feedback' );
+		}
 
 	// Moderating Topics
 	} else {
