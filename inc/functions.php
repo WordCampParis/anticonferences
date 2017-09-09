@@ -178,7 +178,26 @@ function anticonferences_template_part( $slug, $name = '' ) {
 	load_template( $located, false );
 }
 
+/**
+ * Get minified suffix.
+ *
+ * @since 1.0.0
+ *
+ * @param  string $script the name of the script
+ * @return string         url to the minified or regular script
+ */
+function anticonferences_min_suffix() {
+	$min = 'min.';
+
+	if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+		$min = '';
+	}
+
+	return apply_filters( 'anticonferences_min_suffix', $min );
+}
+
 function anticonferences_get_asset( $context = 'front', $type = 'css' ) {
+	$type    = anticonferences_min_suffix() . $type;
 	$located = locate_template( "anticonferences/{$context}.{$type}", false );
 
 	if ( ! $located ) {

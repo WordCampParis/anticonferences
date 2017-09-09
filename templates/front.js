@@ -1,3 +1,4 @@
+/* global AntiConferences */
 ( function( $ ) {
 	var supportForm = $( '#support-container' );
 
@@ -48,7 +49,7 @@
 		$( event.currentTarget ).parent().append( supportForm.addClass( 'active' ) );
 		$( supportForm ).find( '#ac-topic-id' ).val( parentID );
 
-		var hearts = ''
+		var hearts = '';
 		for ( var i=0; i < AntiConferences.votes ; i++ ) {
 			heart.attr( 'data-amount', i + 1 );
 			heart.find( '.ac-loved' ).removeClass( 'ac-loved' ).addClass( 'ac-love' );
@@ -80,7 +81,7 @@
 				$( element ).removeClass( 'selected' );
 			}
 		} );
-	}
+	};
 	$( '.comment-list' ).on( 'mouseenter', '.ac-heart', function( event ) {
 		return window.selectHearts( event );
 	} );

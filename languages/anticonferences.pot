@@ -1,0 +1,344 @@
+# Copyright (C) 2017 WordCampParis
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: AntiConférences 1.0.0\n"
+"Report-Msgid-Bugs-To: "
+"https://github.com/wordcampparis/anticonferences/issues\n"
+"POT-Creation-Date: 2017-09-09 17:22:07+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
+"Last-Translator: WordCampParis <wordcamp.paris@gmail.com>\n"
+"Language-Team: FRENCH <wordcamp.paris@gmail.com>\n"
+"X-Generator: grunt-wp-i18n 0.5.4\n"
+
+#: inc/admin.php:24
+msgid "Details du camp"
+msgstr ""
+
+#: inc/admin.php:37 inc/admin.php:226
+msgid "Sujets proposés"
+msgstr ""
+
+#: inc/admin.php:103
+msgid "Le type de contenu ne correspond pas à celui attentdu."
+msgstr ""
+
+#: inc/admin.php:110
+msgid "Les détails ne sont pas disponibles pour ce camp"
+msgstr ""
+
+#: inc/admin.php:117
+msgid "URL du webhook Slack"
+msgstr ""
+
+#: inc/admin.php:181
+msgid "Post Formats"
+msgstr ""
+
+#: inc/admin.php:225
+msgid "Sujets"
+msgstr ""
+
+#: inc/admin.php:269 inc/admin.php:523
+msgid "Soutiens"
+msgstr ""
+
+#: inc/admin.php:281
+msgid "Aucun soutien pour ce sujet pour le moment."
+msgstr ""
+
+#: inc/admin.php:289
+msgid "%1$s utilisateur soutient ce sujet. %2$s support(s) au total."
+msgid_plural "%1$s utilisateurs soutiennent ce sujet. %2$s support(s) au total."
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/admin.php:303
+msgid "Soutien apporté"
+msgid_plural "Soutiens apportés"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/admin.php:319
+msgid "Supprimer le soutien"
+msgstr ""
+
+#: inc/admin.php:334
+msgid "Soutien supprimé avec succès"
+msgstr ""
+
+#: inc/admin.php:335
+msgid "Une erreur est survenue lors de la suppression du soutien"
+msgstr ""
+
+#: inc/admin.php:395
+msgid "Modifier le sujet"
+msgstr ""
+
+#: inc/admin.php:396
+msgid "Modification d'un sujet"
+msgstr ""
+
+#: inc/admin.php:422
+msgid "Sujets proposés pour {l}"
+msgstr ""
+
+#: inc/admin.php:423
+msgid "Rechercher un sujet"
+msgstr ""
+
+#: inc/admin.php:424
+msgid "Modération des sujets"
+msgstr ""
+
+#: inc/admin.php:425
+msgid "Aucun sujet pour le moment."
+msgstr ""
+
+#: inc/admin.php:502
+msgid "La proposition de sujet suivante a été publiée :"
+msgstr ""
+
+#: inc/admin.php:504
+msgid "Vous pouvez voter pour elle en vous rendant à cette adresse :"
+msgstr ""
+
+#: inc/admin.php:506
+msgid "Partagez-la pour gagner des votes !"
+msgstr ""
+
+#: inc/admin.php:509
+msgid "[%s] Sujet publié"
+msgstr ""
+
+#: inc/admin.php:524
+msgid "Soutiens apportés"
+msgstr ""
+
+#: inc/admin.php:534
+msgid "Sujet proposé"
+msgstr ""
+
+#: inc/classes/class-ac-slack-payload.php:33
+msgid "[%1$s] Nouveau Sujet posté : %2$s"
+msgstr ""
+
+#: inc/classes/class-ac-slack-payload.php:40
+msgid "Modérer"
+msgstr ""
+
+#: inc/classes/class-ac-slack-payload.php:52
+msgid "Auteur : %s"
+msgstr ""
+
+#: inc/classes/class-ac-walker-topic.php:76
+msgid ""
+"Votre sujet est en attente de modération. Vous seul pouvez le voir pour le "
+"moment."
+msgstr ""
+
+#: inc/functions.php:16
+msgid "Date de clôture pour le dépôt des sujets"
+msgstr ""
+
+#: inc/functions.php:25
+msgid "Nombre de votes dont les utilisateurs disposent"
+msgstr ""
+
+#: inc/functions.php:34
+msgid "Notifier les nouveaux sujets dans Slack"
+msgstr ""
+
+#: inc/functions.php:55
+msgid "Camps"
+msgstr ""
+
+#: inc/functions.php:57
+msgid "Tous les camps"
+msgstr ""
+
+#: inc/functions.php:58
+msgid "Camp"
+msgstr ""
+
+#: inc/functions.php:59
+msgid "Ajouter"
+msgstr ""
+
+#: inc/functions.php:60
+msgid "Ajouter un nouveau camp"
+msgstr ""
+
+#: inc/functions.php:61
+msgid "Modifier le camp"
+msgstr ""
+
+#: inc/functions.php:62
+msgid "Nouveau camp"
+msgstr ""
+
+#: inc/functions.php:63
+msgid "Voir le camp"
+msgstr ""
+
+#: inc/functions.php:64
+msgid "Rechercher un camp"
+msgstr ""
+
+#: inc/functions.php:65
+msgid "Aucun camp trouvé"
+msgstr ""
+
+#: inc/functions.php:66
+msgid "Aucun camp trouvé dans la corbeille"
+msgstr ""
+
+#: inc/functions.php:67
+msgid "Insérer dans le camp"
+msgstr ""
+
+#: inc/functions.php:68
+msgid "Attaché à ce camp"
+msgstr ""
+
+#: inc/functions.php:69
+msgid "Filtrer la liste des camps"
+msgstr ""
+
+#: inc/functions.php:70
+msgid "Navigation de la liste des camps"
+msgstr ""
+
+#: inc/functions.php:71
+msgid "Liste des camps"
+msgstr ""
+
+#: inc/functions.php:77
+msgid "Un camp présente les règles du jeu des AntiConférences"
+msgstr ""
+
+#: inc/functions.php:453
+msgid "Merci de cliquer sur le lien suivant pour valider votre soutien :"
+msgstr ""
+
+#: inc/functions.php:457
+msgid "[%s] Validation Soutien"
+msgstr ""
+
+#: inc/functions.php:543
+msgid ""
+"Merci d'avoir validé votre email. Vos soutiens ont été activés et les "
+"prochains le seront automatiquement. %s"
+msgstr ""
+
+#: inc/functions.php:544
+msgid "Afficher les sujets"
+msgstr ""
+
+#: inc/functions.php:547
+msgid ""
+"Une erreur est survenue au cours de la validation de votre email. Il semble "
+"qu'elle ait déjà eut lieu."
+msgstr ""
+
+#: inc/functions.php:623
+msgid "Les plus anciens"
+msgstr ""
+
+#: inc/functions.php:627
+msgid "Les plus récents"
+msgstr ""
+
+#: inc/functions.php:631
+msgid "Les plus supportés"
+msgstr ""
+
+#: inc/tags.php:30
+msgid "Description du Sujet"
+msgstr ""
+
+#: inc/tags.php:80
+msgid "Afficher en premier"
+msgstr ""
+
+#: inc/tags.php:91
+msgid "Nouveau sujet"
+msgstr ""
+
+#: inc/tags.php:108
+msgid "Proposez un nouveau sujet"
+msgstr ""
+
+#: inc/tags.php:109
+msgid "Publier"
+msgstr ""
+
+#: inc/tags.php:119 inc/tags.php:207
+msgid "Abandonner"
+msgstr ""
+
+#: inc/tags.php:156
+msgid ""
+"Votre soutien à ce sujet est en attente de validation. Un email vous a été "
+"envoyé pour procéder à celle-ci."
+msgstr ""
+
+#: inc/tags.php:169
+msgid "Supporter ce sujet"
+msgstr ""
+
+#: inc/tags.php:186
+msgid "Email"
+msgstr ""
+
+#: inc/tags.php:206
+msgid "Soutenir"
+msgstr ""
+
+#: templates/topics-template.php:37
+msgid "La période de proposition des sujets est terminée."
+msgstr ""
+
+#: templates/topics-template.php:41
+msgid ""
+"Aucun sujet n'a été proposé jusqu'à présent. Soyez le premier à en déposer "
+"un !"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "AntiConférences"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://github.com/wordcampparis/anticonferences"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Une extension WordPress pour préparer des AntiConférences."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "WordCampParis"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://github.com/wordcampparis/"
+msgstr ""
+
+#: inc/admin.php:50
+msgctxt "post format"
+msgid "Format"
+msgstr ""
+
+#: inc/functions.php:56
+msgctxt "Main Plugin menu"
+msgid "AntiConférences"
+msgstr ""
+
+#: inc/functions.php:72
+msgctxt "Name Admin Bar"
+msgid "Camp"
+msgstr ""
