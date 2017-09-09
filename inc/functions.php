@@ -3,17 +3,26 @@
  * Plugin's functions.
  *
  * @since  1.0.0
+ *
+ * @package  AntiConferences\inc
  */
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Gets the default Camps Metadatas.
+ *
+ * @since  1.0.0
+ *
+ * @return array Camp Metadatas.
+ */
 function anticonferences_get_default_metas() {
 	return array(
 		'_camp_closing_date' => array(
 			'sanitize_callback'  => 'anticonferences_sanitize_metas',
 			'type'               => 'string',
-			'description'        => __( 'Date de clôture pour le dépôt des sujets', 'anticonferences' ),
+			'description'        => __( 'Closing date for the suggested topics.', 'anticonferences' ),
 			'single'             => true,
 			'show_in_rest'       => array(
 				'name' => 'closing_date',
@@ -22,7 +31,7 @@ function anticonferences_get_default_metas() {
 		'_camp_votes_amount' => array(
 			'sanitize_callback'  => 'anticonferences_sanitize_metas',
 			'type'               => 'integer',
-			'description'        => __( 'Nombre de votes dont les utilisateurs disposent', 'anticonferences' ),
+			'description'        => __( 'Number of votes each user can give to a topic.', 'anticonferences' ),
 			'single'             => true,
 			'show_in_rest'       => array(
 				'name' => 'votes_amount',
@@ -31,12 +40,19 @@ function anticonferences_get_default_metas() {
 		'_camp_slack_webhook' => array(
 			'sanitize_callback'   => 'anticonferences_sanitize_metas',
 			'type'                => 'string',
-			'description'         => __( 'Notifier les nouveaux sujets dans Slack', 'anticonferences' ),
+			'description'         => __( 'Notify about pending topics using Slack.', 'anticonferences' ),
 			'single'              => true,
 		),
 	);
 }
 
+/**
+ * Registers Camps/Posts Metadatas.
+ *
+ * @since  1.0.0
+ *
+ * @param  string $post_type The post type to register Metadatas for.
+ */
 function anticonferences_register_post_metas( $post_type = 'camps' ) {
 	$default_metas = anticonferences_get_default_metas();
 
@@ -49,32 +65,37 @@ function anticonferences_register_post_metas( $post_type = 'camps' ) {
 	}
 }
 
+/**
+ * Registers Camps Post type, Specific supports and Metadatas.
+ *
+ * @since 1.0.0
+ */
 function anticonferences_register_objects() {
 	// Post type
 	$labels = array(
 		'name'                  => __( 'Camps',                               'anticonferences' ),
 		'menu_name'             => _x( 'AntiConférences', 'Main Plugin menu', 'anticonferences' ),
-		'all_items'             => __( 'Tous les camps',                      'anticonferences' ),
+		'all_items'             => __( 'All camps',                           'anticonferences' ),
 		'singular_name'         => __( 'Camp',                                'anticonferences' ),
-		'add_new'               => __( 'Ajouter',                             'anticonferences' ),
-		'add_new_item'          => __( 'Ajouter un nouveau camp',             'anticonferences' ),
-		'edit_item'             => __( 'Modifier le camp',                    'anticonferences' ),
-		'new_item'              => __( 'Nouveau camp',                        'anticonferences' ),
-		'view_item'             => __( 'Voir le camp',                        'anticonferences' ),
-		'search_items'          => __( 'Rechercher un camp',                  'anticonferences' ),
-		'not_found'             => __( 'Aucun camp trouvé',                   'anticonferences' ),
-		'not_found_in_trash'    => __( 'Aucun camp trouvé dans la corbeille', 'anticonferences' ),
-		'insert_into_item'      => __( 'Insérer dans le camp',                'anticonferences' ),
-		'uploaded_to_this_item' => __( 'Attaché à ce camp',                   'anticonferences' ),
-		'filter_items_list'     => __( 'Filtrer la liste des camps',          'anticonferences' ),
-		'items_list_navigation' => __( 'Navigation de la liste des camps',    'anticonferences' ),
-		'items_list'            => __( 'Liste des camps',                     'anticonferences' ),
+		'add_new'               => __( 'Add',                                 'anticonferences' ),
+		'add_new_item'          => __( 'Add a new camp',                      'anticonferences' ),
+		'edit_item'             => __( 'Edit camp',                           'anticonferences' ),
+		'new_item'              => __( 'New camp',                            'anticonferences' ),
+		'view_item'             => __( 'View camp',                           'anticonferences' ),
+		'search_items'          => __( 'Search camps',                        'anticonferences' ),
+		'not_found'             => __( 'No camps found',                      'anticonferences' ),
+		'not_found_in_trash'    => __( 'No camps found in trash',             'anticonferences' ),
+		'insert_into_item'      => __( 'Insert into camp',                    'anticonferences' ),
+		'uploaded_to_this_item' => __( 'Attached to camp',                    'anticonferences' ),
+		'filter_items_list'     => __( 'Filter camps',                        'anticonferences' ),
+		'items_list_navigation' => __( 'Camps navigation',                    'anticonferences' ),
+		'items_list'            => __( 'Camps list',                          'anticonferences' ),
 		'name_admin_bar'        => _x( 'Camp', 'Name Admin Bar',              'anticonferences' ),
 	);
 
 	$params = array(
 		'labels'               => $labels,
-		'description'          => __( 'Un camp présente les règles du jeu des AntiConférences', 'anticonferences' ),
+		'description'          => __( 'Camps inform about the rules of their noconferences', 'anticonferences' ),
 		'public'               => true,
 		'query_var'            => 'ac_camp',
 		'rewrite'              => array(
@@ -103,6 +124,16 @@ function anticonferences_register_objects() {
 }
 add_action( 'init', 'anticonferences_register_objects' );
 
+/**
+ * Checks Camps Post type support.
+ *
+ * This allowes to check for "non boolean" features.
+ *
+ * @since  1.0.0
+ *
+ * @param  string $feature The name of the feature.
+ * @return mixed           The value for the feature.
+ */
 function anticonferences_get_support( $feature = '' ) {
 	$supports = get_all_post_type_supports( 'camps' );
 
@@ -117,6 +148,15 @@ function anticonferences_get_support( $feature = '' ) {
 	return $supports[ $feature ];
 }
 
+/**
+ * Sanitizes the value for the registered Camps Metadatas.
+ *
+ * @since  1.0.0
+ *
+ * @param  mixed $value     The value of the Metadata.
+ * @param  string $meta_key The key of the Metadata.
+ * @return mixed            The sanitized value for the Metadata.
+ */
 function anticonferences_sanitize_metas( $value = '', $meta_key = '' ) {
 	if ( '_camp_closing_date' === $meta_key ) {
 		if ( ! empty( $value ) ) {
@@ -133,6 +173,14 @@ function anticonferences_sanitize_metas( $value = '', $meta_key = '' ) {
 	return $value;
 }
 
+/**
+ * Temporarly registers Camps Metadatas to the Post's post type.
+ *
+ * @since  1.0.0
+ *
+ * @param  array  $data The post data to be inserted.
+ * @return array        The post data to be inserted.
+ */
 function anticonferences_register_temporary_post_metas( $data = array() ) {
 	// Add post metas temporarly.
 	if ( ! empty( $data['post_type'] ) && 'camps' === $data['post_type'] ) {
@@ -143,6 +191,11 @@ function anticonferences_register_temporary_post_metas( $data = array() ) {
 }
 add_filter( 'wp_insert_post_data', 'anticonferences_register_temporary_post_metas', 10, 1 );
 
+/**
+ * Unregisters temporary Camps Metadatas from the Post's post type.
+ *
+ * @since  1.0.0
+ */
 function anticonferences_unregister_temporary_post_metas() {
 	$default_metas = anticonferences_get_default_metas();
 
@@ -154,7 +207,12 @@ function anticonferences_unregister_temporary_post_metas() {
 add_action( 'save_post_camps', 'anticonferences_unregister_temporary_post_metas' );
 
 /**
- * Probably not needed..
+ * Loads a Camps template part.
+ *
+ * @since  1.0.0
+ *
+ * @param  string $slug The template slug.
+ * @param  string $name The template name.
  */
 function anticonferences_template_part( $slug, $name = '' ) {
 	$templates = array();
@@ -183,8 +241,7 @@ function anticonferences_template_part( $slug, $name = '' ) {
  *
  * @since 1.0.0
  *
- * @param  string $script the name of the script
- * @return string         url to the minified or regular script
+ * @return string The minified suffix.
  */
 function anticonferences_min_suffix() {
 	$min = 'min.';
@@ -193,9 +250,25 @@ function anticonferences_min_suffix() {
 		$min = '';
 	}
 
+	/**
+	 * Use this filter to toggle the minified suffix.
+	 *
+	 * @since  1.0.0
+	 *
+	 * @param  string $min The minified suffix.
+	 */
 	return apply_filters( 'anticonferences_min_suffix', $min );
 }
 
+/**
+ * Gets a template asset (CSS or JavaScript).
+ *
+ * @since  1.0.0
+ *
+ * @param  string $context Whether the assets needs to be loaded in Admin or Front.
+ * @param  string $type    Whether it's a `css` or `js` asset.
+ * @return string          The absolute URL to the asset.
+ */
 function anticonferences_get_asset( $context = 'front', $type = 'css' ) {
 	$type    = anticonferences_min_suffix() . $type;
 	$located = locate_template( "anticonferences/{$context}.{$type}", false );
@@ -217,9 +290,17 @@ function anticonferences_get_asset( $context = 'front', $type = 'css' ) {
 	} else {
 		$located = str_replace( $slashed_plugin_dir, anticonferences()->url, $slashed_located );
 	}
+
 	return $located;
 }
 
+/**
+ * Overrides the regular comments template for the Topics one when needed.
+ *
+ * @since  1.0.0
+ *
+ * @return string Absolute path to the Topics template.
+ */
 function anticonferences_topics_template() {
 	// Remove the temporary filter immediately.
 	remove_filter( 'comments_template', 'anticonferences_topics_template', 0 );
@@ -227,6 +308,14 @@ function anticonferences_topics_template() {
 	return anticonferences()->tpl_dir . 'topics-template.php';
 }
 
+/**
+ * Disables unused TinyMCE buttons.
+ *
+ * @since  1.0.0
+ *
+ * @param  array  $buttons The list of TinyMCE buttons.
+ * @return array           The list of TinyMCE buttons.
+ */
 function anticonferences_mce_buttons( $buttons = array() ) {
 	return array_diff( $buttons, array(
 		'wp_more',
@@ -244,6 +333,14 @@ function anticonferences_mce_buttons( $buttons = array() ) {
 	) );
 }
 
+/**
+ * Sets the comment's type when a new topic or a new support is submitted.
+ *
+ * @since  1.0.0
+ *
+ * @param  array  $comment_data The posted datas for the comment.
+ * @return array                The posted datas for the comment.
+ */
 function anticonferences_preprocess_comment( $comment_data = array() ) {
 	if ( isset( $_POST['ac_comment_type'] ) && in_array( $_POST['ac_comment_type'], array( 'ac_topic', 'ac_support' ), true ) ) {
 		$comment_data['comment_type'] = $_POST['ac_comment_type'];
@@ -253,12 +350,28 @@ function anticonferences_preprocess_comment( $comment_data = array() ) {
 }
 add_filter( 'preprocess_comment', 'anticonferences_preprocess_comment', 10, 1 );
 
+/**
+ * Base64 encodes a string removing problematic characters when used in URLs.
+ *
+ * @since  1.0.0
+ *
+ * @param  string $string The string to encode.
+ * @return string         The encoded string.
+ */
 function anticonferences_urlsafe_b64encode( $string ) {
     $data = base64_encode( $string );
     $data = str_replace( array( '+','/','=' ), array( '-','_','' ), $data );
     return $data;
 }
 
+/**
+ * Base64 decodes a string removing problematic characters when used in URLs.
+ *
+ * @since  1.0.0
+ *
+ * @param  string $string The string to decode.
+ * @return string         The decoded string.
+ */
 function anticonferences_urlsafe_b64decode( $string ) {
     $data = str_replace( array( '-','_' ),array( '+','/' ),$string );
     $mod4 = strlen( $data ) % 4;
@@ -269,6 +382,14 @@ function anticonferences_urlsafe_b64decode( $string ) {
     return base64_decode( $data );
 }
 
+/**
+ * Checks if a user has validated his email.
+ *
+ * @since  1.0.0
+ *
+ * @param  string $email The email to check.
+ * @return integer       The number of emails found.
+ */
 function anticonferences_support_awaiting_validation( $email = '' ) {
 	global $wpdb;
 
@@ -279,6 +400,14 @@ function anticonferences_support_awaiting_validation( $email = '' ) {
 	return $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->commentmeta} WHERE meta_key='_ac_support_email' AND meta_value = %s", $email ) );
 }
 
+/**
+ * Checks if a support a user posted can be validated right away.
+ *
+ * @since  1.0.0
+ *
+ * @param  string $email The user email.
+ * @return string        1 (Approved) or O (Pending).
+ */
 function anticonferences_support_allowed( $email = '' ) {
 	global $wpdb;
 
@@ -294,6 +423,14 @@ function anticonferences_support_allowed( $email = '' ) {
 	return $wpdb->get_var( $wpdb->prepare( "SELECT comment_approved FROM {$wpdb->comments} WHERE comment_type = 'ac_support' AND comment_author_email = %s LIMIT 1", $email ) );
 }
 
+/**
+ * Allowes dupe supports and supports to be posted more quickly.
+ *
+ * @since  1.0.0
+ *
+ * @param  boolean $retval Whether dupes or flooding is allowed.
+ * @return boolean         Whether dupes or flooding is allowed.
+ */
 function anticonferences_support_can_flood_and_dupe( $retval ) {
 	if ( isset( $_POST['ac_comment_type'] ) && 'ac_support' === $_POST['ac_comment_type'] ) {
 		$retval = false;
@@ -304,6 +441,15 @@ function anticonferences_support_can_flood_and_dupe( $retval ) {
 add_filter( 'duplicate_comment_id', 'anticonferences_support_can_flood_and_dupe', 11, 1 );
 add_filter( 'wp_is_comment_flood',  'anticonferences_support_can_flood_and_dupe', 11, 1 );
 
+/**
+ * Customize the Comments approval process for Topics and Supports.
+ *
+ * @since  1.0.0
+ *
+ * @param  integer $approved     Whether the comment should be approved or hold.
+ * @param  array   $comment_data The comment's data.
+ * @return integer               Whether the comment should be approved or hold.
+ */
 function anticonferences_pre_comment_approved( $approved = 0, $comment_data = array() ) {
 	if ( ! isset( $comment_data['comment_type'] ) ) {
 		return $approved;
@@ -326,6 +472,14 @@ function anticonferences_pre_comment_approved( $approved = 0, $comment_data = ar
 }
 add_filter( 'pre_comment_approved', 'anticonferences_pre_comment_approved', 10, 2 );
 
+/**
+ * Customizes the comment form to be used to post Topics.
+ *
+ * @since  1.0.0
+ *
+ * @param  array  $fields The comment form fields.
+ * @return array          The topic form fields.
+ */
 function anticonferences_topic_form_fields( $fields = array() ) {
 	unset( $fields['fields']['url'] );
 	$fields['comment_field'] = anticonferences_topic_get_editor();
@@ -333,6 +487,15 @@ function anticonferences_topic_form_fields( $fields = array() ) {
 	return $fields;
 }
 
+/**
+ * Forces the comments to be open for Camps.
+ *
+ * @since  1.0.0
+ *
+ * @param  boolean $return  Whether comments are open.
+ * @param  integer $post_id The post ID.
+ * @return boolean          Whether comments are open.
+ */
 function anticonferences_comments_open( $return = false, $post_id = 0 ) {
 	$post = get_queried_object();
 
@@ -354,6 +517,14 @@ function anticonferences_comments_open( $return = false, $post_id = 0 ) {
 }
 add_filter( 'comments_open', 'anticonferences_comments_open', 10, 2 );
 
+/**
+ * Edits the query to count comments to match Camps context.
+ *
+ * @since  1.0.0
+ *
+ * @param  string $query The SQL query.
+ * @return string        The SQL query.
+ */
 function anticonferences_all_comments_count_query( $query = '' ) {
 	global $wpdb;
 	$ac = anticonferences();
@@ -393,6 +564,15 @@ function anticonferences_all_comments_count_query( $query = '' ) {
 	return $query;
 }
 
+/**
+ * Decides whether the Comments count query should be overriden or not.
+ *
+ * @since  1.0.0
+ *
+ * @param  array   $stats   The comments statistics.
+ * @param  integer $post_id The Post ID statistics relate to.
+ * @return array            The comments statistics.
+ */
 function anticonferences_count_all_comments( $stats = array(), $post_id = 0 ) {
 	$screen = null;
 	if ( function_exists( 'get_current_screen' ) ) {
@@ -401,7 +581,7 @@ function anticonferences_count_all_comments( $stats = array(), $post_id = 0 ) {
 
 	$add_filter = ! $post_id;
 
-	if ( ( isset( $screen->id ) && 'edit-comments' === $screen->id && 'camps' === $screen->post_type) || ! empty( anticonferences()->camp_topics ) ) {
+	if ( ( isset( $screen->id ) && 'edit-comments' === $screen->id && 'camps' === $screen->post_type ) || ! empty( anticonferences()->camp_topics ) ) {
 		$add_filter = true;
 	}
 
@@ -414,6 +594,13 @@ function anticonferences_count_all_comments( $stats = array(), $post_id = 0 ) {
 }
 add_filter( 'wp_count_comments', 'anticonferences_count_all_comments', 10, 2 );
 
+/**
+ * Edits the Comment's query queryvars when needed.
+ *
+ * @since  1.0.0
+ *
+ * @param  WP_Comment_Query $comment_query The comment query object.
+ */
 function anticonferences_parse_comment_query( WP_Comment_Query $comment_query ) {
 	$not_in = array( 'ac_topic', 'ac_support' );
 
@@ -447,18 +634,34 @@ function anticonferences_parse_comment_query( WP_Comment_Query $comment_query ) 
 }
 add_action( 'parse_comment_query', 'anticonferences_parse_comment_query' );
 
+/**
+ * Notifies a support author he needs to validate it.
+ *
+ * @since  1.0.0
+ *
+ * @param  WP_Comment $support The support object.
+ */
 function anticonferences_notify_support_author( WP_Comment $support ) {
 	$blogname        = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
 
-	$notify_message  = __( 'Merci de cliquer sur le lien suivant pour valider votre soutien :', 'anticonferences' ) . "\r\n";
+	$notify_message  = __( 'Please click on the following link to validate your support to the topic:', 'anticonferences' ) . "\r\n";
 	$notify_message .= add_query_arg( 'key-support', anticonferences_urlsafe_b64encode( $support->comment_author_email ), get_post_permalink( $support->comment_post_ID ) ) . "\r\n";
 
 	$camp_title = get_post_field( 'post_title', $support->comment_post_ID );
-	$subject    = sprintf( __('[%s] Validation Soutien', 'anticonferences' ), $camp_title );
+	$subject    = sprintf( __('[%s] Support validation', 'anticonferences' ), $camp_title );
 
 	@wp_mail( $support->comment_author_email, wp_specialchars_decode( $subject ), $notify_message );
 }
 
+/**
+ * Notifies a Camp moderator or a Slack channel about a new pending topic.
+ *
+ * @since  1.0.0
+ *
+ * @param  boolean $maybe_notify Whether to notify about the pending topic or not.
+ * @param  integer $comment_ID   The topic ID.
+ * @return boolean               Whether to notify about the pending topic or not.
+ */
 function anticonferences_notify_moderator( $maybe_notify = true, $comment_ID = 0 ) {
 	$topic = get_comment( $comment_ID );
 
@@ -501,6 +704,15 @@ function anticonferences_notify_moderator( $maybe_notify = true, $comment_ID = 0
 }
 add_filter( 'notify_moderator', 'anticonferences_notify_moderator', 10, 2 );
 
+/**
+ * Disable notifications for the Post author when a comment is a topic or a support.
+ *
+ * @since  1.0.0
+ *
+ * @param  boolean $maybe_notify Whether to notify the post author or not.
+ * @param  integer $comment_ID   The comment ID.
+ * @return [type]                Whether to notify the post author or not.
+ */
 function anticonferences_notify_post_author( $maybe_notify = true, $comment_ID = 0 ) {
 	$ac = get_comment( $comment_ID );
 
@@ -516,6 +728,11 @@ function anticonferences_notify_post_author( $maybe_notify = true, $comment_ID =
 }
 add_filter( 'notify_post_author', 'anticonferences_notify_post_author', 10, 2 );
 
+/**
+ * Validates user supports.
+ *
+ * @since  1.0.0
+ */
 function anticonferences_template_redirect() {
 	if ( ! is_singular( 'camps' ) ){
 		return;
@@ -540,15 +757,24 @@ function anticonferences_template_redirect() {
 		}
 
 		wp_die( sprintf(
-			__( 'Merci d\'avoir validé votre email. Vos soutiens ont été activés et les prochains le seront automatiquement. %s', 'anticonferences' ),
-			'<a href="' . esc_url( $back_link ). '">' . esc_html__( 'Afficher les sujets', 'anticonferences' ) . '</a>.'
+			__( 'Your email and pending support(s) has been validated. All your future supports to topics will automatically be published. %s', 'anticonferences' ),
+			'<a href="' . esc_url( $back_link ). '">' . esc_html__( 'View topics', 'anticonferences' ) . '</a>.'
 		) );
 	} else {
-		wp_die( __( 'Une erreur est survenue au cours de la validation de votre email. Il semble qu\'elle ait déjà eut lieu.', 'anticonferences' ) );
+		wp_die( __( 'An error occured while validating your email. It looks like it\'s been already validated.', 'anticonferences' ) );
 	}
 }
 add_action( 'template_redirect', 'anticonferences_template_redirect', 8 );
 
+/**
+ * Redirects the user to the topics he supported.
+ *
+ * @since  1.0.0
+ *
+ * @param  string     $redirect The URL to redirect the user to.
+ * @param  WP_Comment $support  The Support object.
+ * @return string     $redirect The URL to redirect the user to.
+ */
 function anticonferences_topic_redirect( $redirect = '', WP_Comment $support ) {
 	if ( 'ac_support' === $support->comment_type ) {
 		$redirect = get_comment_link( $support->comment_parent );
@@ -558,6 +784,14 @@ function anticonferences_topic_redirect( $redirect = '', WP_Comment $support ) {
 }
 add_filter( 'comment_post_redirect', 'anticonferences_topic_redirect', 10, 2 );
 
+/**
+ * Updates the Supports count adding the new one.
+ *
+ * @since  1.0.0
+ *
+ * @param  integer    $comment_ID The Topic ID.
+ * @param  WP_Comment $support    The support object.
+ */
 function anticonferences_increment_support_count( $comment_ID, WP_Comment $support ) {
 	if ( empty( $support->comment_approved ) ) {
 		return;
@@ -571,6 +805,14 @@ function anticonferences_increment_support_count( $comment_ID, WP_Comment $suppo
 add_action( 'comment_approved_ac_support', 'anticonferences_increment_support_count', 10, 2 );
 add_action( 'wp_insert_comment',           'anticonferences_increment_support_count', 10, 2 );
 
+/**
+ * Updates the Supports count removing the trashed/spammed one.
+ *
+ * @since  1.0.0
+ *
+ * @param  integer    $comment_ID The Topic ID.
+ * @param  WP_Comment $support    The support object.
+ */
 function anticonferences_decrement_support_count( $comment_ID, WP_Comment $support ) {
 	$count  = (int) get_comment_meta( $support->comment_parent, '_ac_support_count', true );
 	$count -= (int) $support->comment_content;
@@ -584,6 +826,11 @@ function anticonferences_decrement_support_count( $comment_ID, WP_Comment $suppo
 add_action( 'comment_trash_ac_support', 'anticonferences_decrement_support_count', 10, 2 );
 add_action( 'comment_spam_ac_support',  'anticonferences_decrement_support_count', 10, 2 );
 
+/**
+ * Enqueues the displayed Camp assets.
+ *
+ * @since  1.0.0
+ */
 function anticonferences_enqueue_assets() {
 	if ( ! is_singular( 'camps' ) ){
 		return;
@@ -605,6 +852,14 @@ function anticonferences_enqueue_assets() {
 }
 add_action( 'wp_enqueue_scripts', 'anticonferences_enqueue_assets', 20 );
 
+/**
+ * Gets the supports count for a Topic.
+ *
+ * @since  1.0.0
+ *
+ * @param  WP_Comment $comment The Topic object.
+ * @return integer             The number of supports for the Topic.
+ */
 function anticonferences_topic_get_support_count( WP_Comment $comment ) {
 	// Only count the approved supports
 	$array_count = wp_filter_object_list( $comment->get_children( array( 'type' => 'ac_support' ) ), array( 'comment_approved' => 1 ), 'and','comment_content' );
@@ -617,22 +872,48 @@ function anticonferences_topic_get_support_count( WP_Comment $comment ) {
 	return array_sum( $array_count );
 }
 
+/**
+ * Gets the Camp's topics order options.
+ *
+ * @since  1.0.0
+ *
+ * @return array The Camp's topics order options.
+ */
 function anticonferences_get_order_options() {
 	$order_options =  array(
 		'date_asc'       => array(
-			'label' => __( 'Les plus anciens', 'anticonferences' ),
+			'label' => __( 'Oldest', 'anticonferences' ),
 			'order' => 'ASC',
 		),
 		'date_desc'      => array(
-			'label' => __( 'Les plus récents', 'anticonferences' ),
+			'label' => __( 'Newest', 'anticonferences' ),
 			'order' => 'DESC',
 		),
 		'support_count'  => array(
-			'label'    => __( 'Les plus supportés', 'anticonferences' ),
+			'label'    => __( 'Most supported', 'anticonferences' ),
 			'order'    => 'DESC',
 			'meta_key' => '_ac_support_count',
 		),
 	);
 
+	/**
+	 * Use this filter to add order options.
+	 *
+	 * @since  1.0.0
+	 *
+	 * @param  array $order_options The Camp's topics order options.
+	 */
 	return apply_filters( 'anticonferences_get_order_options', $order_options );
 }
+
+/**
+ * Loads translation if needed.
+ *
+ * @since  1.0.0
+ */
+function anticonferences_load_textdomain() {
+	$ac = anticonferences();
+
+	load_plugin_textdomain( $ac->domain, false, dirname( $ac->basename ) . '/languages' );
+}
+add_action( 'plugins_loaded', 'anticonferences_load_textdomain', 7 );

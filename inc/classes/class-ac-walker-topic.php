@@ -6,8 +6,7 @@
  *
  * @since  1.0.0
  *
- * @package AntiConférences
- * @subpackage inc\classes
+ * @package  AntiConferences\inc\classes
  */
 
 // Exit if accessed directly
@@ -73,7 +72,7 @@ class AC_Walker_Topic extends Walker_Comment {
 		$topic = preg_replace(
 			'/<p class=\"comment-awaiting-moderation\">(.*?)<\/p>/',
 			sprintf ( '<p class="topic-awaiting-moderation">%s</p>',
-				__( 'Votre sujet est en attente de modération. Vous seul pouvez le voir pour le moment.', 'anticonferences' )
+				__( 'Your topic is awaiting moderation. Only you can see it for now.', 'anticonferences' )
 			),
 			$topic
 		);

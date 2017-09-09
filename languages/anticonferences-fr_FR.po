@@ -3,338 +3,351 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: AntiConférences 1.0.0\n"
-"Report-Msgid-Bugs-To: "
-"https://github.com/wordcampparis/anticonferences/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/wordcampparis/anticonferences/"
+"issues\n"
 "POT-Creation-Date: 2017-09-09 20:31:29+00:00\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2017-09-09 22:32+0100\n"
 "Last-Translator: WordCampParis <wordcamp.paris@gmail.com>\n"
 "Language-Team: FRENCH <wordcamp.paris@gmail.com>\n"
-"X-Generator: grunt-wp-i18n 0.5.4\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.7.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: inc/admin.php:33
 msgid "Camp Details"
-msgstr ""
+msgstr "Details du camp"
 
 #: inc/admin.php:46 inc/admin.php:283
 msgid "Suggested Topics"
-msgstr ""
+msgstr "Sujets proposés"
 
 #: inc/admin.php:138
 msgid "The post type does not match the expected one."
-msgstr ""
+msgstr "Le type de contenu ne correspond pas à celui attentdu."
 
 #: inc/admin.php:145
 msgid "Camp details are not available"
-msgstr ""
+msgstr "Les détails ne sont pas disponibles pour ce camp"
 
 #: inc/admin.php:152
 msgid "Slack webhook URL"
-msgstr ""
+msgstr "URL du webhook Slack"
 
 #: inc/admin.php:223
 msgid "Post Formats"
-msgstr ""
+msgstr "Format du Camp"
 
 #: inc/admin.php:282
 msgid "Topics"
-msgstr ""
+msgstr "Sujets"
 
 #: inc/admin.php:341 inc/admin.php:645
 msgid "Supports"
-msgstr ""
+msgstr "Soutiens"
 
 #: inc/admin.php:360
 msgid "No supports for this topic yet."
-msgstr ""
+msgstr "Aucun soutien pour ce sujet pour le moment."
 
 #: inc/admin.php:368
 msgid "%1$s user supports this topic. %2$s support(s) provided so far."
 msgid_plural "%1$s users support this topic. %2$s support(s) provided so far."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1$s utilisateur soutient ce sujet. %2$s support(s) au total."
+msgstr[1] "%1$s utilisateurs soutiennent ce sujet. %2$s support(s) au total."
 
 #: inc/admin.php:382
 msgid "Support provided"
 msgid_plural "Supports provided"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Soutien apporté"
+msgstr[1] "Soutiens apportés"
 
 #: inc/admin.php:398
 msgid "Remove support"
-msgstr ""
+msgstr "Supprimer le soutien"
 
 #: inc/admin.php:418
 msgid "Support successfully removed"
-msgstr ""
+msgstr "Soutien supprimé avec succès"
 
 #: inc/admin.php:419
 msgid "An error occured while removing the support"
-msgstr ""
+msgstr "Une erreur est survenue lors de la suppression du soutien"
 
 #: inc/admin.php:484
 msgid "Edit the topic"
-msgstr ""
+msgstr "Modifier le sujet"
 
 #: inc/admin.php:485
 msgid "Editing topic"
-msgstr ""
+msgstr "Modification d'un sujet"
 
 #: inc/admin.php:511
 msgid "Suggested Topics for {l}"
-msgstr ""
+msgstr "Sujets proposés pour {l}"
 
 #: inc/admin.php:512
 msgid "Search topics"
-msgstr ""
+msgstr "Rechercher un sujet"
 
 #: inc/admin.php:513
 msgid "Moderate topics"
-msgstr ""
+msgstr "Modération des sujets"
 
 #: inc/admin.php:514
 msgid "No topics found."
-msgstr ""
+msgstr "Aucun sujet pour le moment."
 
 #: inc/admin.php:616
 msgid "The following topic has been published:"
-msgstr ""
+msgstr "La proposition de sujet suivante a été publiée :"
 
 #: inc/admin.php:618
 msgid "You can support it from this URL:"
-msgstr ""
+msgstr "Vous pouvez voter pour elle en vous rendant à cette adresse :"
 
 #: inc/admin.php:620
 msgid "Share this URL to get more supports!"
-msgstr ""
+msgstr "Partagez-la pour gagner des votes !"
 
 #: inc/admin.php:623
 msgid "[%s] Topic published"
-msgstr ""
+msgstr "[%s] Sujet publié"
 
 #: inc/admin.php:646
 msgid "Supports provided"
-msgstr ""
+msgstr "Soutiens apportés"
 
 #: inc/admin.php:656
 msgid "Suggested topic"
-msgstr ""
+msgstr "Sujet proposé"
 
 #: inc/classes/class-ac-slack-payload.php:32
 msgid "[%1$s] New topic posted: %2$s"
-msgstr ""
+msgstr "[%1$s] Nouveau Sujet posté : %2$s"
 
 #: inc/classes/class-ac-slack-payload.php:39
 msgid "Moderate"
-msgstr ""
+msgstr "Modérer"
 
 #: inc/classes/class-ac-slack-payload.php:51
 msgid "Author: %s"
-msgstr ""
+msgstr "Auteur : %s"
 
 #: inc/classes/class-ac-walker-topic.php:75
 msgid "Your topic is awaiting moderation. Only you can see it for now."
 msgstr ""
+"Votre sujet est en attente de modération. Vous seul pouvez le voir pour le "
+"moment."
 
 #: inc/functions.php:25
 msgid "Closing date for the suggested topics."
-msgstr ""
+msgstr "Date de clôture pour le dépôt des sujets."
 
 #: inc/functions.php:34
 msgid "Number of votes each user can give to a topic."
-msgstr ""
+msgstr "Nombre de votes dont les utilisateurs disposent."
 
 #: inc/functions.php:43
 msgid "Notify about pending topics using Slack."
-msgstr ""
+msgstr "Notifier des nouveaux sujets en utilisant Slack."
 
 #: inc/functions.php:76
 msgid "Camps"
-msgstr ""
+msgstr "Camps"
 
 #: inc/functions.php:78
 msgid "All camps"
-msgstr ""
+msgstr "Tous les camps"
 
 #: inc/functions.php:79
 msgid "Camp"
-msgstr ""
+msgstr "Camp"
 
 #: inc/functions.php:80
 msgid "Add"
-msgstr ""
+msgstr "Ajouter"
 
 #: inc/functions.php:81
 msgid "Add a new camp"
-msgstr ""
+msgstr "Ajouter un nouveau camp"
 
 #: inc/functions.php:82
 msgid "Edit camp"
-msgstr ""
+msgstr "Modifier le camp"
 
 #: inc/functions.php:83
 msgid "New camp"
-msgstr ""
+msgstr "Nouveau camp"
 
 #: inc/functions.php:84
 msgid "View camp"
-msgstr ""
+msgstr "Voir le camp"
 
 #: inc/functions.php:85
 msgid "Search camps"
-msgstr ""
+msgstr "Rechercher un camp"
 
 #: inc/functions.php:86
 msgid "No camps found"
-msgstr ""
+msgstr "Aucun camp trouvé"
 
 #: inc/functions.php:87
 msgid "No camps found in trash"
-msgstr ""
+msgstr "Aucun camp trouvé dans la corbeille"
 
 #: inc/functions.php:88
 msgid "Insert into camp"
-msgstr ""
+msgstr "Insérer dans le camp"
 
 #: inc/functions.php:89
 msgid "Attached to camp"
-msgstr ""
+msgstr "Attaché à ce camp"
 
 #: inc/functions.php:90
 msgid "Filter camps"
-msgstr ""
+msgstr "Filtrer la liste des camps"
 
 #: inc/functions.php:91
 msgid "Camps navigation"
-msgstr ""
+msgstr "Navigation de la liste des camps"
 
 #: inc/functions.php:92
 msgid "Camps list"
-msgstr ""
+msgstr "Liste des camps"
 
 #: inc/functions.php:98
 msgid "Camps inform about the rules of their noconferences"
-msgstr ""
+msgstr "Un camp présente les règles du jeu des AntiConférences"
 
 #: inc/functions.php:647
-msgid "Please click on the following link to validate your support to the topic:"
-msgstr ""
+msgid ""
+"Please click on the following link to validate your support to the topic:"
+msgstr "Merci de cliquer sur le lien suivant pour valider votre soutien :"
 
 #: inc/functions.php:651
 msgid "[%s] Support validation"
-msgstr ""
+msgstr "[%s] Validation Soutien"
 
 #: inc/functions.php:760
 msgid ""
 "Your email and pending support(s) has been validated. All your future "
 "supports to topics will automatically be published. %s"
 msgstr ""
+"Merci d'avoir validé votre email. Vos soutiens ont été activés et les "
+"prochains le seront automatiquement. %s"
 
 #: inc/functions.php:761
 msgid "View topics"
-msgstr ""
+msgstr "Afficher les sujets"
 
 #: inc/functions.php:764
 msgid ""
 "An error occured while validating your email. It looks like it's been "
 "already validated."
 msgstr ""
+"Une erreur est survenue au cours de la validation de votre email. Il semble "
+"qu'elle ait déjà eut lieu."
 
 #: inc/functions.php:885
 msgid "Oldest"
-msgstr ""
+msgstr "Les plus anciens"
 
 #: inc/functions.php:889
 msgid "Newest"
-msgstr ""
+msgstr "Les plus récents"
 
 #: inc/functions.php:893
 msgid "Most supported"
-msgstr ""
+msgstr "Les plus supportés"
 
 #: inc/tags.php:39
 msgid "Topic description"
-msgstr ""
+msgstr "Description du Sujet"
 
 #: inc/tags.php:94
 msgid "Display"
-msgstr ""
+msgstr "Afficher en premier"
 
 #: inc/tags.php:110
 msgid "New topic"
-msgstr ""
+msgstr "Nouveau sujet"
 
 #: inc/tags.php:132
 msgid "Suggest a new topic"
-msgstr ""
+msgstr "Proposez un nouveau sujet"
 
 #: inc/tags.php:133
 msgid "Publish"
-msgstr ""
+msgstr "Publier"
 
 #: inc/tags.php:151 inc/tags.php:254
 msgid "Cancel"
-msgstr ""
+msgstr "Abandonner"
 
 #: inc/tags.php:198
 msgid ""
 "Your support to this topic is awaiting validation. Please check your emails "
 "to proceed to it."
 msgstr ""
+"Votre soutien à ce sujet est en attente de validation. Un email vous a été "
+"envoyé pour procéder à celle-ci."
 
 #: inc/tags.php:211
 msgid "Support this topic"
-msgstr ""
+msgstr "Supporter ce sujet"
 
 #: inc/tags.php:233
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: inc/tags.php:253
 msgid "Support"
-msgstr ""
+msgstr "Soutenir"
 
 #: templates/topics-template.php:37
 msgid "Time to suggest new topics is over."
-msgstr ""
+msgstr "La période de proposition des sujets est terminée."
 
 #: templates/topics-template.php:41
 msgid "No topics were published yet. Be the first to publish one!"
 msgstr ""
+"Aucun sujet n'a été proposé jusqu'à présent. Soyez le premier à en déposer "
+"un !"
 
 #. Plugin Name of the plugin/theme
 msgid "AntiConférences"
-msgstr ""
+msgstr "AntiConférences"
 
 #. Plugin URI of the plugin/theme
 msgid "https://github.com/wordcampparis/anticonferences"
-msgstr ""
+msgstr "https://github.com/wordcampparis/anticonferences"
 
 #. Description of the plugin/theme
 msgid "WordPress plugin to help you prepare Unconferences"
-msgstr ""
+msgstr "Une extension WordPress pour préparer des AntiConférences."
 
 #. Author of the plugin/theme
 msgid "WordCampParis"
-msgstr ""
+msgstr "WordCampParis"
 
 #. Author URI of the plugin/theme
 msgid "https://github.com/wordcampparis/"
-msgstr ""
+msgstr "https://github.com/wordcampparis/"
 
 #: inc/admin.php:59
 msgctxt "post format"
 msgid "Format"
-msgstr ""
+msgstr "Format"
 
 #: inc/functions.php:77
 msgctxt "Main Plugin menu"
 msgid "AntiConférences"
-msgstr ""
+msgstr "AntiConférences"
 
 #: inc/functions.php:93
 msgctxt "Name Admin Bar"
 msgid "Camp"
-msgstr ""
+msgstr "Camp"

@@ -34,11 +34,11 @@
 
 	<?php elseif ( anticonferences_topics_closed() ) : ?>
 
-		<p class="no-comments"><?php _e( 'La période de proposition des sujets est terminée.', 'anticonferences' ); ?></p>
+		<p class="no-comments"><?php _e( 'Time to suggest new topics is over.', 'anticonferences' ); ?></p>
 
 	<?php else : ?>
 
-		<p class="no-comments"><?php _e( 'Aucun sujet n\'a été proposé jusqu\'à présent. Soyez le premier à en déposer un !', 'anticonferences' ); ?></p>
+		<p class="no-comments"><?php _e( 'No topics were published yet. Be the first to publish one!', 'anticonferences' ); ?></p>
 
 	<?php endif; ?>
 

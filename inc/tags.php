@@ -1,13 +1,22 @@
 <?php
 /**
- * Plugin's functions.
+ * Plugin's template tags.
  *
  * @since  1.0.0
+ *
+ * @package  AntiConferences\inc
  */
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Gets a WP Editor to write a topic.
+ *
+ * @since  1.0.0
+ *
+ * @return string the WP Editor
+ */
 function anticonferences_topic_get_editor() {
 	$args = array(
 		'textarea_name' => 'comment',
@@ -27,7 +36,7 @@ function anticonferences_topic_get_editor() {
 	?>
 
 	<p class="comment-form-comment">
-		<label for="comment"><?php esc_html_e( 'Description du Sujet', 'anticonferences' ) ;?> <span class="required">*</span></label>
+		<label for="comment"><?php esc_html_e( 'Topic description', 'anticonferences' ) ;?> <span class="required">*</span></label>
 		<?php wp_editor( '', 'comment', $args ); ?>
 	</p>
 
@@ -40,6 +49,11 @@ function anticonferences_topic_get_editor() {
 	return $editor;
 }
 
+/**
+ * Outputs the Camp's topics order form.
+ *
+ * @since  1.0.0
+ */
 function anticonferences_order_form() {
 	$order_options = anticonferences_get_order_options();
 	$order_value   = get_query_var( 'orderby' );
@@ -77,18 +91,23 @@ function anticonferences_order_form() {
 				<span class="screen-reader-text">%5$s</span>
 			</button>
 		</form>
-	', esc_url( get_post_permalink() ), $by_input, esc_attr__( 'Afficher en premier', 'anticonferences' ), $options_output, esc_attr__( 'Afficher en premier', 'anticonferences' ) );
+	', esc_url( get_post_permalink() ), $by_input, esc_attr__( 'Display', 'anticonferences' ), $options_output, esc_attr__( 'Display', 'anticonferences' ) );
 
 	echo $order_form_html;
 }
 
+/**
+ * Outputs the Topics toolbar.
+ *
+ * @since  1.0.0
+ */
 function anticonferences_topics_toolbar() {
 	?>
 	<div id="topics-toolbar">
 		<ul class="filter-links">
 			<li id="ac-new-topic">
 				<button class="button button-primary">
-					<span class="label"><?php esc_html_e( 'Nouveau sujet', 'anticonferences' ); ?></span>
+					<span class="label"><?php esc_html_e( 'New topic', 'anticonferences' ); ?></span>
 				</button>
 			</li>
 
@@ -100,25 +119,48 @@ function anticonferences_topics_toolbar() {
 	<?php
 }
 
+/**
+ * Outputs the new Topic form.
+ *
+ * @since 1.0.0
+ */
 function anticonferences_topic_form() {
 	// Temporarly filter the comment form default arguments.
 	add_filter( 'comment_form_defaults', 'anticonferences_topic_form_fields' );
 
 	comment_form( array(
-		'title_reply'    => __( 'Proposez un nouveau sujet', 'anticonferences' ),
-		'label_submit'   => __( 'Publier', 'anticonferences' ),
+		'title_reply'    => __( 'Suggest a new topic', 'anticonferences' ),
+		'label_submit'   => __( 'Publish', 'anticonferences' ),
 	) );
 
 	// Remove the temporary filter
 	remove_filter( 'comment_form_defaults', 'anticonferences_topic_form_fields' );
 }
 
+/**
+ * Add custom submit fields for the new Topic form.
+ *
+ * @since  1.0.0
+ *
+ * @param  string $submit_fields HTML output for custom submit fields.
+ * @return string                HTML output for custom submit fields.
+ */
 function anticonferences_topic_type( $submit_fields = '' ) {
 	$submit_fields .= '<input type="hidden" value="ac_topic" name="ac_comment_type"/>';
 
-	return '<input type="reset" value="' . esc_attr__( 'Abandonner', 'anticonferences' ) . '"/>' . $submit_fields;
+	return '<input type="reset" value="' . esc_attr__( 'Cancel', 'anticonferences' ) . '"/>' . $submit_fields;
 }
 
+/**
+ * Outputs the Support action button by replacing the Comment reply link.
+ *
+ * @since  1.0.0
+ *
+ * @param  string     $link    The Comment reply link
+ * @param  array      $args    @see get_comment_reply_link() for the description of available args.
+ * @param  WP_Comment $comment The Topic object.
+ * @return string              The Support action button.
+ */
 function anticonferences_topic_support( $link = '', $args = array(), WP_Comment $comment ) {
 	// Topics need to be approved to be supported.
 	if ( ! $comment->comment_approved ) {
@@ -153,7 +195,7 @@ function anticonferences_topic_support( $link = '', $args = array(), WP_Comment 
 		if ( 0 === (int) $emails[ $commenter['comment_author_email'] ] ) {
 			$feedback = sprintf(
 				'<p class="support-awaiting-moderation">%s</p>',
-				__( 'Votre soutien à ce sujet est en attente de validation. Un email vous a été envoyé pour procéder à celle-ci.', 'anticonferences' )
+				__( 'Your support to this topic is awaiting validation. Please check your emails to proceed to it.', 'anticonferences' )
 			);
 		}
 	}
@@ -166,13 +208,18 @@ function anticonferences_topic_support( $link = '', $args = array(), WP_Comment 
 		%6$s',
 		(int) $comment->comment_ID,
 		$disabled,
-		esc_html__( 'Supporter ce sujet', 'anticonferences' ),
+		esc_html__( 'Support this topic', 'anticonferences' ),
 		$class,
 		$support_count,
 		$feedback
 	);
 }
 
+/**
+ * Outputs the new support form.
+ *
+ * @since  1.0.0
+ */
 function anticonferences_support_form() {
 	$unlogged_inputs = '';
 
@@ -203,11 +250,18 @@ function anticonferences_support_form() {
 		esc_url( site_url( '/wp-comments-post.php' ) ),
 		$unlogged_inputs,
 		(int) get_the_ID(),
-		esc_attr__(  'Soutenir', 'anticonferences' ),
-		esc_attr__(  'Abandonner', 'anticonferences' )
+		esc_attr__(  'Support', 'anticonferences' ),
+		esc_attr__(  'Cancel', 'anticonferences' )
 	);
 }
 
+/**
+ * Checks if the call for topics is closed.
+ *
+ * @since  1.0.0
+ *
+ * @return boolean True if the call for topics is closed. False otherwise.
+ */
 function anticonferences_topics_closed() {
 	$closed   = false;
 	$end_date = (int) get_post_meta( get_the_ID(), '_camp_closing_date', true );

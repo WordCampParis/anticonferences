@@ -2,7 +2,7 @@
 /**
  * Plugin Name: AntiConférences
  * Plugin URI: https://github.com/wordcampparis/anticonferences
- * Description: Une extension WordPress pour préparer des AntiConférences.
+ * Description: WordPress plugin to help you prepare Unconferences
  * Version: 1.0.0
  * Requires at least: 4.8
  * Tested up to: 4.9

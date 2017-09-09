@@ -4,8 +4,7 @@
  *
  * @since  1.0.0
  *
- * @package AntiConférences
- * @subpackage inc\classes
+ * @package  AntiConferences\inc\classes
  */
 
 // Exit if accessed directly
@@ -30,14 +29,14 @@ class AC_Slack_Payload {
 		$camp = get_post_field( 'post_title', $topic->comment_post_ID );
 
 		$title = sprintf(
-			__( '[%1$s] Nouveau Sujet posté : %2$s', 'anticonferences' ),
+			__( '[%1$s] New topic posted: %2$s', 'anticonferences' ),
 			$camp,
 			sprintf( '<%1$s|%2$s>',
 				esc_url_raw( add_query_arg( array(
 					'action' => 'editcomment',
 					'c' => $topic->comment_ID
 				), admin_url( 'comment.php' ) ) ),
-				esc_html__( 'Modérer', 'anticonferences')
+				esc_html__( 'Moderate', 'anticonferences')
 			)
 		);
 
@@ -49,7 +48,7 @@ class AC_Slack_Payload {
 		);
 
 		$this->attachments[0]->fields[] = (object) array(
-			'title' => sprintf( __( 'Auteur : %s', 'anticonferences' ), esc_html( $topic->comment_author ) ),
+			'title' => sprintf( __( 'Author: %s', 'anticonferences' ), esc_html( $topic->comment_author ) ),
 			'value' => wp_trim_words( $topic->comment_content, 30 ),
 			'short' => false,
 		);
