@@ -689,3 +689,34 @@ function anticonferences_admin_topic_supports_column( $column = '', $comment_ID 
 	echo wp_kses( $supports_count, array( 'span' => array( 'class' => true ) ) );
 }
 add_action( 'manage_comments_custom_column', 'anticonferences_admin_topic_supports_column', 10, 2 );
+
+/**
+ * Upgrade the plugin.
+ *
+ * @since 1.0.0
+ */
+function anticonferences_admin_upgrade() {
+	$db_version = get_option( '_anticonferences_version', 0 );
+	$version    = anticonferences()->version;
+
+	// Reset the rewrite rules during install.
+	if ( ! $db_version ) {
+		delete_option( 'rewrite_rules' );
+
+	// Do upgrades!
+	} elseif ( version_compare( $db_version, $version, '<' ) ) {
+		/**
+		 * Nothing to upgrade right now.
+		 *
+		 * @since 1.0.0
+		 */
+		do_action( 'anticonferences_admin_upgrade' );
+
+	// No need to carry on, the plugin is installed and up to date.
+	} else {
+		return;
+	}
+
+	update_option( '_anticonferences_version', $version );
+}
+add_action( 'admin_init', 'anticonferences_admin_upgrade', 200 );
