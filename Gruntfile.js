@@ -87,6 +87,15 @@ module.exports = function( grunt ) {
 				esprimaOptions:{},
 				verbose: false
 			}
+		},
+		'git-archive': {
+			archive: {
+				options: {
+					'format'  : 'zip',
+					'output'  : '<%= pkg.name %>.zip',
+					'tree-ish': 'HEAD@{0}'
+				}
+			}
 		}
 	} );
 
@@ -101,6 +110,8 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'commit',  ['checktextdomain', 'jstest'] );
 
 	grunt.registerTask( 'release', ['checktextdomain', 'makepot', 'clean', 'jstest', 'shrink'] );
+
+	grunt.registerTask( 'compress', ['git-archive'] );
 
 	// Default task.
 	grunt.registerTask( 'default', ['commit'] );
