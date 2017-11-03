@@ -105,11 +105,19 @@ function anticonferences_topics_toolbar() {
 	?>
 	<div id="topics-toolbar">
 		<ul class="filter-links">
-			<li id="ac-new-topic">
-				<button class="button button-primary">
-					<span class="label"><?php esc_html_e( 'New topic', 'anticonferences' ); ?></span>
-				</button>
-			</li>
+			<?php if ( ! anticonferences_topics_closed() ) : ?>
+				<li id="ac-new-topic">
+					<button class="button button-primary">
+						<span class="label"><?php esc_html_e( 'New topic', 'anticonferences' ); ?></span>
+					</button>
+				</li>
+			<?php else : ?>
+
+				<li id="ac-camp-closed">
+					<p><?php esc_html_e( 'Time to suggest new topics is over.', 'anticonferences' ); ?></p>
+				</li>
+
+			<?php endif ; ?>
 
 			<li id="ac-order-form" class="last">
 				<?php anticonferences_order_form() ;?>
@@ -263,18 +271,5 @@ function anticonferences_support_form() {
  * @return boolean True if the call for topics is closed. False otherwise.
  */
 function anticonferences_topics_closed() {
-	$closed   = false;
-	$end_date = (int) get_post_meta( get_the_ID(), '_camp_closing_date', true );
-
-	if ( ! $end_date ) {
-		return $closed;
-	}
-
-	$now = strtotime( date_i18n( 'Y-m-d H:i' ) );
-
-	if ( $end_date <= $now ) {
-		$closed = true;
-	}
-
-	return $closed;
+	return anticonferences_camp_ended( get_the_ID() );
 }

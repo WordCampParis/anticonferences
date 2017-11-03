@@ -51,6 +51,14 @@ body.single-camps .screen-reader-text {
 	padding: 15px 0;
 }
 
+#topics-toolbar li#ac-camp-closed p {
+	line-height: 1.5;
+	padding-top: 1em;
+	padding-bottom: 1em;
+	font-size: 120%;
+	margin-bottom: 0;
+}
+
 #topics-toolbar .filter-links li.last {
 	float: right;
 }

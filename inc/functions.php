@@ -488,7 +488,38 @@ function anticonferences_topic_form_fields( $fields = array() ) {
 }
 
 /**
- * Forces the comments to be open for Camps.
+ * Checks if Topics and Supports submission is now ended.
+ *
+ * @since  1.0.1
+ *
+ * @param  integer $post_id The ID of the Camp.
+ * @return boolean          True if Topics and Supports submission is ended.
+ *                          False otherwise.
+ */
+function anticonferences_camp_ended( $post_id = 0 ) {
+	$closed   = false;
+
+	if ( ! $post_id ) {
+		return $closed;
+	}
+
+	$end_date = (int) get_post_meta( $post_id, '_camp_closing_date', true );
+
+	if ( ! $end_date ) {
+		return $closed;
+	}
+
+	$now = strtotime( date_i18n( 'Y-m-d H:i' ) );
+
+	if ( $end_date <= $now ) {
+		$closed = true;
+	}
+
+	return $closed;
+}
+
+/**
+ * Forces the comments to be open for Camps till the end date is reached.
  *
  * @since  1.0.0
  *
@@ -510,7 +541,7 @@ function anticonferences_comments_open( $return = false, $post_id = 0 ) {
 			add_filter( 'comment_id_fields',  'anticonferences_topic_type'         );
 		}
 
-		$return = true;
+		$return = ! anticonferences_camp_ended( $post->ID );
 	}
 
 	return $return;
