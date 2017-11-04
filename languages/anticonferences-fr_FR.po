@@ -2,11 +2,11 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: AntiConférences 1.0.0\n"
+"Project-Id-Version: AntiConférences 1.0.1\n"
 "Report-Msgid-Bugs-To: https://github.com/wordcampparis/anticonferences/"
 "issues\n"
-"POT-Creation-Date: 2017-10-27 02:06:48+00:00\n"
-"PO-Revision-Date: 2017-10-27 04:08+0100\n"
+"POT-Creation-Date: 2017-11-04 05:08:43+00:00\n"
+"PO-Revision-Date: 2017-11-04 06:10+0100\n"
 "Last-Translator: imath <mathchristo@yahoo.fr>\n"
 "Language-Team: FRENCH <wordcamp.paris@gmail.com>\n"
 "Language: fr\n"
@@ -136,7 +136,7 @@ msgstr "Modérer"
 msgid "Author: %s"
 msgstr "Auteur : %s"
 
-#: inc/classes/class-ac-walker-topic.php:75
+#: inc/classes/class-ac-walker-topic.php:79
 msgid "Your topic is awaiting moderation. Only you can see it for now."
 msgstr ""
 "Votre sujet est en attente de modération. Vous seul pouvez le voir pour le "
@@ -222,16 +222,20 @@ msgstr "Liste des camps"
 msgid "Camps inform about the rules of their noconferences"
 msgstr "Un camp présente les règles du jeu des AntiConférences"
 
-#: inc/functions.php:647
+#: inc/functions.php:500
+msgid "You do not have enough votes left to add %s more."
+msgstr "Vous ne disposez plus d'assez de votes pour en ajouter %s."
+
+#: inc/functions.php:721
 msgid ""
 "Please click on the following link to validate your support to the topic:"
 msgstr "Merci de cliquer sur le lien suivant pour valider votre soutien :"
 
-#: inc/functions.php:651
+#: inc/functions.php:725
 msgid "[%s] Support validation"
 msgstr "[%s] Validation Soutien"
 
-#: inc/functions.php:760
+#: inc/functions.php:834
 msgid ""
 "Your email and pending support(s) has been validated. All your future "
 "supports to topics will automatically be published. %s"
@@ -239,11 +243,11 @@ msgstr ""
 "Merci d'avoir validé votre email. Vos soutiens ont été activés et les "
 "prochains le seront automatiquement. %s"
 
-#: inc/functions.php:761
+#: inc/functions.php:835
 msgid "View topics"
 msgstr "Afficher les sujets"
 
-#: inc/functions.php:764
+#: inc/functions.php:838
 msgid ""
 "An error occured while validating your email. It looks like it's been "
 "already validated."
@@ -251,15 +255,15 @@ msgstr ""
 "Une erreur est survenue au cours de la validation de votre email. Il semble "
 "qu'elle ait déjà eut lieu."
 
-#: inc/functions.php:885
+#: inc/functions.php:959
 msgid "Oldest"
 msgstr "Les plus anciens"
 
-#: inc/functions.php:889
+#: inc/functions.php:963
 msgid "Newest"
 msgstr "Les plus récents"
 
-#: inc/functions.php:893
+#: inc/functions.php:967
 msgid "Most supported"
 msgstr "Les plus supportés"
 
@@ -271,23 +275,27 @@ msgstr "Description du Sujet"
 msgid "Display"
 msgstr "Afficher en premier"
 
-#: inc/tags.php:110
+#: inc/tags.php:111
 msgid "New topic"
 msgstr "Nouveau sujet"
 
-#: inc/tags.php:132
+#: inc/tags.php:117 templates/topics-template.php:37
+msgid "Time to suggest new topics is over."
+msgstr "La période de proposition des sujets est terminée."
+
+#: inc/tags.php:140
 msgid "Suggest a new topic"
 msgstr "Proposez un nouveau sujet"
 
-#: inc/tags.php:133
+#: inc/tags.php:141
 msgid "Publish"
 msgstr "Publier"
 
-#: inc/tags.php:151 inc/tags.php:254
+#: inc/tags.php:159 inc/tags.php:262
 msgid "Cancel"
 msgstr "Abandonner"
 
-#: inc/tags.php:198
+#: inc/tags.php:206
 msgid ""
 "Your support to this topic is awaiting validation. Please check your emails "
 "to proceed to it."
@@ -295,21 +303,17 @@ msgstr ""
 "Votre soutien à ce sujet est en attente de validation. Un email vous a été "
 "envoyé pour procéder à celle-ci."
 
-#: inc/tags.php:211
+#: inc/tags.php:219
 msgid "Support this topic"
 msgstr "Supporter ce sujet"
 
-#: inc/tags.php:233
+#: inc/tags.php:241
 msgid "Email"
 msgstr "Email"
 
-#: inc/tags.php:253
+#: inc/tags.php:261
 msgid "Support"
 msgstr "Soutenir"
-
-#: templates/topics-template.php:37
-msgid "Time to suggest new topics is over."
-msgstr "La période de proposition des sujets est terminée."
 
 #: templates/topics-template.php:41
 msgid "No topics were published yet. Be the first to publish one!"
