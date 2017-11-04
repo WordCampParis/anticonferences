@@ -424,6 +424,37 @@ function anticonferences_support_allowed( $email = '' ) {
 }
 
 /**
+ * Checks if an email reached the support's quota for the Camp.
+ *
+ * @since  1.0.1
+ *
+ * @param  string  $email    The user email.
+ * @param  integer $post_id  The Camp ID.
+ * @return boolean           True if the quota is reached. False otherwise.
+ */
+function anticonferences_support_quota_reached( $email = '', $post_id = 0, $new_support = 0 ) {
+	global $wpdb;
+
+	if ( ! $post_id ) {
+		return false;
+	}
+
+	$quota = (int) get_post_meta( $post_id, '_camp_votes_amount', true );
+
+	if ( ! $quota ) {
+		return false;
+	}
+
+	/**
+	 * @todo cache
+	 */
+
+	$support_count = (int) $wpdb->get_var( $wpdb->prepare( "SELECT SUM(comment_content) FROM {$wpdb->comments} WHERE comment_type = 'ac_support' AND comment_author_email = %s AND comment_post_ID = %d", $email, $post_id ) );
+
+	return $support_count + $new_support > $quota;
+}
+
+/**
  * Allowes dupe supports and supports to be posted more quickly.
  *
  * @since  1.0.0
@@ -461,8 +492,20 @@ function anticonferences_pre_comment_approved( $approved = 0, $comment_data = ar
 
 	// New supports may require a validate step.
 	} elseif ( 'ac_support' === $comment_data['comment_type'] ) {
-		if ( 0 !== (int) anticonferences_support_awaiting_validation( anticonferences_urlsafe_b64encode( $comment_data['comment_author_email'] ) ) ) {
+		$votes = (int) $comment_data['comment_content'];
+
+		// The support quota is reached !
+		if ( anticonferences_support_quota_reached( $comment_data['comment_author_email'], $comment_data['comment_post_ID'], $votes ) ) {
+			return new WP_Error( 'support_quota_reached', sprintf(
+				__( 'You do not have enough votes left to add %s more.', 'anticonferences' ),
+				number_format_i18n( $votes )
+			), 403 );
+
+		// The user hadn't validated his email yet!
+		} elseif ( 0 !== (int) anticonferences_support_awaiting_validation( anticonferences_urlsafe_b64encode( $comment_data['comment_author_email'] ) ) ) {
 			$approved = 0;
+
+		// The user has at least a support validated and can safely vote.
 		} else {
 			$approved = (int) anticonferences_support_allowed( $comment_data['comment_author_email'] );
 		}
