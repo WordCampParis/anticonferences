@@ -3,7 +3,7 @@
  * Plugin Name: AntiConférences
  * Plugin URI: https://github.com/wordcampparis/anticonferences
  * Description: WordPress plugin to help you prepare Unconferences
- * Version: 1.0.1
+ * Version: 1.0.2
  * Requires at least: 4.8
  * Tested up to: 4.9
  * License: GPLv2 or later
@@ -128,7 +128,7 @@ final class AntiConferences {
 	 */
 	private function globals() {
 		// Version
-		$this->version = '1.0.1';
+		$this->version = '1.0.2';
 
 		// Domain
 		$this->domain = 'anticonferences';

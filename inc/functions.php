@@ -859,6 +859,19 @@ function anticonferences_topic_redirect( $redirect = '', WP_Comment $support ) {
 add_filter( 'comment_post_redirect', 'anticonferences_topic_redirect', 10, 2 );
 
 /**
+ * Allow Avatars for the Anticonferences topics.
+ *
+ * @since 1.0.2
+ *
+ * @param  array  $types The list of comment types that supports Avatars.
+ * @return array         The list of comment types that supports Avatars.
+ */
+function anticonferences_avatar_comment_types( $types = array() ) {
+	return array_merge( $types, array( 'ac_topic' ) );
+}
+add_filter( 'get_avatar_comment_types', 'anticonferences_avatar_comment_types', 10, 1 );
+
+/**
  * Updates the Supports count adding the new one.
  *
  * @since  1.0.0
