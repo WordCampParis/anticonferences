@@ -6,14 +6,15 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/wordcampparis/anticonferences/"
 "issues\n"
 "POT-Creation-Date: 2017-11-04 05:08:43+00:00\n"
-"PO-Revision-Date: 2017-11-04 06:10+0100\n"
-"Last-Translator: imath <mathchristo@yahoo.fr>\n"
+"PO-Revision-Date: 2017-11-24 11:41+0100\n"
+"Last-Translator: fxbenard pour WP-Translations.pro <fx@wp-translations."
+"pro>\n"
 "Language-Team: FRENCH <wordcamp.paris@gmail.com>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.7.1\n"
+"X-Generator: Poedit 2.0.4\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: inc/admin.php:33
@@ -26,7 +27,7 @@ msgstr "Sujets proposés"
 
 #: inc/admin.php:138
 msgid "The post type does not match the expected one."
-msgstr "Le type de contenu ne correspond pas à celui attentdu."
+msgstr "Le type de contenu ne correspond pas à celui attendu."
 
 #: inc/admin.php:145
 msgid "Camp details are not available"
@@ -55,8 +56,8 @@ msgstr "Aucun soutien pour ce sujet pour le moment."
 #: inc/admin.php:368
 msgid "%1$s user supports this topic. %2$s support(s) provided so far."
 msgid_plural "%1$s users support this topic. %2$s support(s) provided so far."
-msgstr[0] "%1$s utilisateur soutient ce sujet. %2$s support(s) au total."
-msgstr[1] "%1$s utilisateurs soutiennent ce sujet. %2$s support(s) au total."
+msgstr[0] "%1$s utilisateur soutient ce sujet. %2$s soutien(s) au total."
+msgstr[1] "%1$s utilisateurs soutiennent ce sujet. %2$s soutien(s) au total."
 
 #: inc/admin.php:382
 msgid "Support provided"
@@ -70,7 +71,7 @@ msgstr "Supprimer le soutien"
 
 #: inc/admin.php:418
 msgid "Support successfully removed"
-msgstr "Soutien supprimé avec succès"
+msgstr "Soutien supprimé"
 
 #: inc/admin.php:419
 msgid "An error occured while removing the support"
@@ -82,7 +83,7 @@ msgstr "Modifier le sujet"
 
 #: inc/admin.php:485
 msgid "Editing topic"
-msgstr "Modification d'un sujet"
+msgstr "Modification d’un sujet"
 
 #: inc/admin.php:511
 msgid "Suggested Topics for {l}"
@@ -126,7 +127,7 @@ msgstr "Sujet proposé"
 
 #: inc/classes/class-ac-slack-payload.php:32
 msgid "[%1$s] New topic posted: %2$s"
-msgstr "[%1$s] Nouveau Sujet posté : %2$s"
+msgstr "[%1$s] Nouveau sujet publié : %2$s"
 
 #: inc/classes/class-ac-slack-payload.php:39
 msgid "Moderate"
@@ -224,12 +225,13 @@ msgstr "Un camp présente les règles du jeu des AntiConférences"
 
 #: inc/functions.php:500
 msgid "You do not have enough votes left to add %s more."
-msgstr "Vous ne disposez plus d'assez de votes pour en ajouter %s."
+msgstr "Vous ne disposez plus d’assez de votes pour en ajouter %s."
 
 #: inc/functions.php:721
 msgid ""
 "Please click on the following link to validate your support to the topic:"
-msgstr "Merci de cliquer sur le lien suivant pour valider votre soutien :"
+msgstr ""
+"Veuillez cliquer sur le lien suivant pour valider votre soutien à ce sujet :"
 
 #: inc/functions.php:725
 msgid "[%s] Support validation"
@@ -240,7 +242,7 @@ msgid ""
 "Your email and pending support(s) has been validated. All your future "
 "supports to topics will automatically be published. %s"
 msgstr ""
-"Merci d'avoir validé votre email. Vos soutiens ont été activés et les "
+"Merci d’avoir validé votre e-mail. Vos soutiens ont été activés et les "
 "prochains le seront automatiquement. %s"
 
 #: inc/functions.php:835
@@ -252,8 +254,8 @@ msgid ""
 "An error occured while validating your email. It looks like it's been "
 "already validated."
 msgstr ""
-"Une erreur est survenue au cours de la validation de votre email. Il semble "
-"qu'elle ait déjà eut lieu."
+"Une erreur est survenue au cours de la validation de votre e-mail. Il "
+"semblerait qu’il a déjà été validé."
 
 #: inc/functions.php:959
 msgid "Oldest"
@@ -265,11 +267,11 @@ msgstr "Les plus récents"
 
 #: inc/functions.php:967
 msgid "Most supported"
-msgstr "Les plus supportés"
+msgstr "Les plus soutenus"
 
 #: inc/tags.php:39
 msgid "Topic description"
-msgstr "Description du Sujet"
+msgstr "Description du sujet"
 
 #: inc/tags.php:94
 msgid "Display"
@@ -293,23 +295,23 @@ msgstr "Publier"
 
 #: inc/tags.php:159 inc/tags.php:262
 msgid "Cancel"
-msgstr "Abandonner"
+msgstr "Annuler"
 
 #: inc/tags.php:206
 msgid ""
 "Your support to this topic is awaiting validation. Please check your emails "
 "to proceed to it."
 msgstr ""
-"Votre soutien à ce sujet est en attente de validation. Un email vous a été "
-"envoyé pour procéder à celle-ci."
+"Votre soutien à ce sujet est en attente de validation. Veuillez consulter "
+"vos e-mails pour l’effectuer."
 
 #: inc/tags.php:219
 msgid "Support this topic"
-msgstr "Supporter ce sujet"
+msgstr "Soutenir ce sujet"
 
 #: inc/tags.php:241
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
 
 #: inc/tags.php:261
 msgid "Support"
@@ -318,7 +320,7 @@ msgstr "Soutenir"
 #: templates/topics-template.php:41
 msgid "No topics were published yet. Be the first to publish one!"
 msgstr ""
-"Aucun sujet n'a été proposé jusqu'à présent. Soyez le premier à en déposer "
+"Aucun sujet n’a été proposé jusqu’à présent. Soyez le premier à en déposer "
 "un !"
 
 #. Plugin Name of the plugin/theme
