@@ -724,7 +724,12 @@ function anticonferences_notify_support_author( WP_Comment $support ) {
 	$camp_title = get_post_field( 'post_title', $support->comment_post_ID );
 	$subject    = sprintf( __('[%s] Support validation', 'anticonferences' ), $camp_title );
 
+	// Make sure the Post won't be embed if the email is sent using HTML.
+	add_filter( 'pre_oembed_result', '__return_false' );
+
 	@wp_mail( $support->comment_author_email, wp_specialchars_decode( $subject ), $notify_message );
+
+	remove_filter( 'pre_oembed_result', '__return_false' );
 }
 
 /**
