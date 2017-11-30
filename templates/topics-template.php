@@ -32,6 +32,8 @@
 			<?php anticonferences_support_form(); ?>
 		</div>
 
+		<?php the_comments_pagination( anticonferences_get_topics_pagination_labels() ); ?>
+
 	<?php elseif ( anticonferences_topics_closed() ) : ?>
 
 		<p class="no-comments"><?php esc_html_e( 'Time to suggest new topics is over.', 'anticonferences' ); ?></p>

@@ -967,21 +967,37 @@ function anticonferences_topic_get_support_count( WP_Comment $comment ) {
  * @return array The Camp's topics order options.
  */
 function anticonferences_get_order_options() {
+	$order = get_option( 'default_comments_page' );
+
+	// Regular orders
 	$order_options =  array(
 		'date_asc'       => array(
-			'label' => __( 'Oldest', 'anticonferences' ),
-			'order' => 'ASC',
+			'label'      => __( 'Oldest', 'anticonferences' ),
+			'order'      => 'ASC',
 		),
 		'date_desc'      => array(
 			'label' => __( 'Newest', 'anticonferences' ),
 			'order' => 'DESC',
 		),
-		'support_count'  => array(
-			'label'    => __( 'Most supported', 'anticonferences' ),
-			'order'    => 'DESC',
-			'meta_key' => '_ac_support_count',
-		),
 	);
+
+	// Reverse it if needed.
+	if ( 'newest' === $order ) {
+		$order_options = array_reverse( $order_options, true );
+	}
+
+	// Add the order by number of support
+	$order_options = array_merge( $order_options, array(
+		'support_count'  => array(
+			'label'      => __( 'Most supported', 'anticonferences' ),
+			'order'      => 'DESC',
+			'meta_key'   => '_ac_support_count',
+			'pagination' => array(
+				'prev_text' => __( 'More supported', 'anticonferences' ),
+				'next_text' => __( 'Less supported', 'anticonferences' ),
+			),
+		),
+	) );
 
 	/**
 	 * Use this filter to add order options.
@@ -991,6 +1007,43 @@ function anticonferences_get_order_options() {
 	 * @param  array $order_options The Camp's topics order options.
 	 */
 	return apply_filters( 'anticonferences_get_order_options', $order_options );
+}
+
+/**
+ * Returns the Previous and Next labels for the Topics pagination.
+ *
+ * @since 1.0.3
+ *
+ * @return array The Previous and Next labels for the Topics pagination
+ */
+function anticonferences_get_topics_pagination_labels() {
+	$supported_orders = anticonferences_get_order_options();
+	$orderby          = get_query_var( 'orderby' );
+
+	if ( ! $orderby ) {
+		$orderby = key( $supported_orders );
+	}
+
+	$labels = array(
+		'prev_text' => __( 'Older', 'anticonferences' ),
+		'next_text' => __( 'Newer', 'anticonferences' ),
+	);
+
+	if ( isset( $_GET['order'] ) && 'DESC' === $_GET['order'] ) {
+		$p = $labels['prev_text'];
+		$n = $labels['next_text'];
+
+		$labels = array(
+			'prev_text' => $n,
+			'next_text' => $p,
+		);
+	}
+
+	if ( isset( $supported_orders[ $orderby ]['pagination'] ) ) {
+		$labels = wp_parse_args( $supported_orders[ $orderby ]['pagination'], $labels );
+	}
+
+	return $labels;
 }
 
 /**

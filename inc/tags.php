@@ -60,9 +60,13 @@ function anticonferences_order_form() {
 
 	if ( ! $order_value ) {
 		$order_value = 'date_asc';
+
+		if ( 'newest' === get_option( 'default_comments_page' ) ) {
+			$order_value = 'date_desc';
+		}
 	}
 
-	$by             = 'ASC';
+	$by             = strtoupper( get_option( 'comments_order', 'asc' ) );
 	$options_output = '';
 	foreach ( $order_options as $o => $orderby ) {
 		$selected = selected( $order_value, $o, false );
