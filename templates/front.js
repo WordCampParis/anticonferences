@@ -2,6 +2,13 @@
 ( function( $ ) {
 	var supportForm = $( '#support-container' );
 
+	$( document ).ready( function() {
+		var list_comments = document.querySelector( '.comment-list' );
+		for ( var i = list_comments.children.length; i >= 0; i-- ) {
+			list_comments.appendChild(list_comments.children[Math.random() * i | 0]);
+		}
+	});
+	
 	$( '#ac-new-topic' ).on( 'click', function( event ) {
 		event.preventDefault();
 
