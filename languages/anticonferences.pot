@@ -2,10 +2,10 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: AntiConférences 1.0.2\n"
+"Project-Id-Version: AntiConférences 1.0.3\n"
 "Report-Msgid-Bugs-To: "
 "https://github.com/wordcampparis/anticonferences/issues\n"
-"POT-Creation-Date: 2017-11-24 21:09:40+00:00\n"
+"POT-Creation-Date: 2017-12-01 06:31:08+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -222,89 +222,117 @@ msgstr ""
 msgid "You do not have enough votes left to add %s more."
 msgstr ""
 
-#: inc/functions.php:721
+#: inc/functions.php:744
 msgid "Please click on the following link to validate your support to the topic:"
 msgstr ""
 
-#: inc/functions.php:725
+#: inc/functions.php:748
 msgid "[%s] Support validation"
 msgstr ""
 
-#: inc/functions.php:839
+#: inc/functions.php:857
 msgid ""
 "Your email and pending support(s) has been validated. All your future "
 "supports to topics will automatically be published. %s"
 msgstr ""
 
-#: inc/functions.php:840
+#: inc/functions.php:858
 msgid "View topics"
 msgstr ""
 
-#: inc/functions.php:843
+#: inc/functions.php:861
 msgid ""
 "An error occured while validating your email. It looks like it's been "
 "already validated."
 msgstr ""
 
-#: inc/functions.php:977
+#: inc/functions.php:1007
 msgid "Oldest"
 msgstr ""
 
-#: inc/functions.php:981
+#: inc/functions.php:1011
 msgid "Newest"
 msgstr ""
 
-#: inc/functions.php:985
+#: inc/functions.php:1024
+msgid "Random order"
+msgstr ""
+
+#: inc/functions.php:1027
+msgid "Previous"
+msgstr ""
+
+#: inc/functions.php:1028
+msgid "Next"
+msgstr ""
+
+#: inc/functions.php:1033
 msgid "Most supported"
+msgstr ""
+
+#: inc/functions.php:1037
+msgid "More supported"
+msgstr ""
+
+#: inc/functions.php:1038
+msgid "Less supported"
+msgstr ""
+
+#: inc/functions.php:1069
+msgid "Older"
+msgstr ""
+
+#: inc/functions.php:1070
+msgid "Newer"
 msgstr ""
 
 #: inc/tags.php:39
 msgid "Topic description"
 msgstr ""
 
-#: inc/tags.php:94
+#: inc/tags.php:95
 msgid "Display"
 msgstr ""
 
-#: inc/tags.php:111
+#: inc/tags.php:112
 msgid "New topic"
 msgstr ""
 
-#: inc/tags.php:117 templates/topics-template.php:37
+#: inc/tags.php:118 templates/topics-template.php:39
 msgid "Time to suggest new topics is over."
 msgstr ""
 
-#: inc/tags.php:140
+#: inc/tags.php:141
 msgid "Suggest a new topic"
 msgstr ""
 
-#: inc/tags.php:141
+#: inc/tags.php:142
 msgid "Publish"
 msgstr ""
 
-#: inc/tags.php:159 inc/tags.php:262
+#: inc/tags.php:160 inc/tags.php:263
 msgid "Cancel"
 msgstr ""
 
-#: inc/tags.php:206
+#: inc/tags.php:207
 msgid ""
 "Your support to this topic is awaiting validation. Please check your emails "
 "to proceed to it."
 msgstr ""
 
-#: inc/tags.php:219
+#: inc/tags.php:220
 msgid "Support this topic"
 msgstr ""
 
-#: inc/tags.php:241
+#: inc/tags.php:242
 msgid "Email"
 msgstr ""
 
-#: inc/tags.php:261
+#: inc/tags.php:262
 msgid "Support"
 msgstr ""
 
-#: templates/topics-template.php:41
+#: templates/topics-template.php:43
 msgid "No topics were published yet. Be the first to publish one!"
 msgstr ""
 
