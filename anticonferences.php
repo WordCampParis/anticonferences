@@ -142,6 +142,7 @@ final class AntiConferences {
 		$this->url     = plugin_dir_url ( $this->file );
 		$this->inc_dir = trailingslashit( $this->dir . 'inc' );
 		$this->tpl_dir = trailingslashit( $this->dir . 'templates' );
+		$this->seed    = 0;
 	}
 
 	/**

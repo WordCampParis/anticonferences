@@ -669,6 +669,23 @@ function anticonferences_count_all_comments( $stats = array(), $post_id = 0 ) {
 add_filter( 'wp_count_comments', 'anticonferences_count_all_comments', 10, 2 );
 
 /**
+ * Edit the comment query clauses when topics are randomized (default behavior).
+ *
+ * @since  1.0.3
+ *
+ * @param  array $clauses An array of comment query clauses.
+ * @return array          An array of comment query clauses.
+ */
+function anticonferences_randomize_topics( $clauses = array() ) {
+	remove_filter( 'comments_clauses', 'anticonferences_randomize_topics', 10, 1 );
+
+	// Override Order by clause.
+	$clauses['orderby'] = 'RAND(' . anticonferences_get_seed() . ')';
+
+	return $clauses;
+}
+
+/**
  * Edits the Comment's query queryvars when needed.
  *
  * @since  1.0.0
@@ -686,12 +703,18 @@ function anticonferences_parse_comment_query( WP_Comment_Query $comment_query ) 
 
 		$comment_query->query_vars['type__not_in'] = array_merge( (array) $comment_query->query_vars['type__not_in'], $not_in );
 	} elseif ( is_singular( 'camps' ) ) {
-		$orderby = get_query_var( 'orderby' );
-		$order   = get_query_var( 'order' );
+		$orderby          = get_query_var( 'orderby' );
+		$order            = get_query_var( 'order' );
+		$supported_orders = anticonferences_get_order_options();
 
-		if ( $order && $orderby && ! $comment_query->query_vars['parent'] ) {
-			$supported_orders = anticonferences_get_order_options();
+		if ( ( ! $orderby && 'random' === key( $supported_orders ) ) || ( 'random' === $orderby && isset( $supported_orders['random'] ) ) ) {
 
+			// Set the orderby so that it can be used within the serialized key of the comment cache object.
+			$comment_query->query_vars['orderby'] = 'random_topics_' . anticonferences_get_seed();
+
+			add_filter( 'comments_clauses', 'anticonferences_randomize_topics', 10, 1 );
+
+		} elseif ( $order && $orderby && ! $comment_query->query_vars['parent'] ) {
 			if ( isset( $supported_orders[ $orderby ] ) ) {
 				if ( in_array( $orderby, array( 'date_asc', 'date_desc' ), true ) ) {
 					$comment_query->query_vars['orderby'] = 'comment_date_gmt';
@@ -996,7 +1019,16 @@ function anticonferences_get_order_options() {
 	}
 
 	// Add the order by number of support
-	$order_options = array_merge( $order_options, array(
+	$order_options = array_merge( array(
+		'random'  => array(
+			'label'      => __( 'Random order', 'anticonferences' ),
+			'order'      => '',
+			'pagination' => array(
+				'prev_text' => __( 'Previous', 'anticonferences' ),
+				'next_text' => __( 'Next', 'anticonferences' ),
+			),
+		),
+	), $order_options, array(
 		'support_count'  => array(
 			'label'      => __( 'Most supported', 'anticonferences' ),
 			'order'      => 'DESC',
@@ -1054,6 +1086,35 @@ function anticonferences_get_topics_pagination_labels() {
 
 	return $labels;
 }
+
+/**
+ * Get the seed to use to randomize for this session.
+ *
+ * @since  1.0.3
+ *
+ * @return integer The session seed.
+ */
+function anticonferences_get_seed() {
+	return anticonferences()->seed;
+}
+
+/**
+ * Set the seed for the session to be used with random order.
+ *
+ * @since  1.0.3
+ */
+function anticonferences_set_seed() {
+	$ac = anticonferences();
+
+	if ( ! $ac->seed && ! empty( $_COOKIE[ 'anticonferences-seed-' . COOKIEHASH ] ) ) {
+		$ac->seed = (int) $_COOKIE[ 'anticonferences-seed-' . COOKIEHASH ];
+	} else {
+		$ac->seed = rand();
+		$secure   = ( 'https' === parse_url( home_url(), PHP_URL_SCHEME ) );
+		setcookie( 'anticonferences-seed-' . COOKIEHASH, $ac->seed, 0, COOKIEPATH, COOKIE_DOMAIN, $secure );
+	}
+}
+add_action( 'wp_loaded', 'anticonferences_set_seed' );
 
 /**
  * Loads translation if needed.
