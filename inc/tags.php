@@ -58,12 +58,9 @@ function anticonferences_order_form() {
 	$order_options = anticonferences_get_order_options();
 	$order_value   = get_query_var( 'orderby' );
 
+	// Take the first order option by default.
 	if ( ! $order_value ) {
-		$order_value = 'date_asc';
-
-		if ( 'newest' === get_option( 'default_comments_page' ) ) {
-			$order_value = 'date_desc';
-		}
+		$order_value = key( $order_options );
 	}
 
 	$by             = strtoupper( get_option( 'comments_order', 'asc' ) );

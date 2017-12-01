@@ -967,7 +967,16 @@ function anticonferences_topic_get_support_count( WP_Comment $comment ) {
  * @return array The Camp's topics order options.
  */
 function anticonferences_get_order_options() {
-	$order = get_option( 'default_comments_page' );
+	if ( ! get_option( 'page_comments' ) ) {
+		$order = 'oldest';
+
+		if ( 'desc' === get_option( 'comments_order', 'asc' ) ) {
+			$order = 'newest';
+		}
+
+	} else {
+		$order = get_option( 'default_comments_page' );
+	}
 
 	// Regular orders
 	$order_options =  array(
